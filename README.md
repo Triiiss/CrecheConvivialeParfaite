@@ -27,3 +27,18 @@ Yì jiǎn hán méi ào lì xuě zhōng
 Zhǐ wéi yī rén piāo xiāng
 Ài wǒ suǒ ài wú yuàn wú huǐ
 Cǐ qíng cháng liú xīn jiān
+
+
+
+Principe :
+Crèche connectée 
+Utilisateurs : enfants, les encadrants, les parents
+
+Objets connectés : 
+- Chauffeur de biberon connecté;
+- Boîte de jouets connectés;
+- Projecteur pour la sieste et le ciel;
+- Haut parleur connecté (musique, voix, berceuse)
+- Radiateur connecté
+
+Thème : Chine et le pays imaginaire promis

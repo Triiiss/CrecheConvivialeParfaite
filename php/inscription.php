@@ -1,0 +1,97 @@
+<?php
+    session_start();
+    if (isset($_POST["genre"])){
+        $genre=$_POST["genre"];
+    }
+    if (isset($_POST["prenom"])){
+        $prenom=$_POST["prenom"];
+    }
+    if (isset($_POST["nom"])){
+        $nom=$_POST["nom"];
+    }
+    if (isset($_POST["email"])){
+        $email=$_POST["email"];
+    }
+    if (isset($_POST["age"])){
+        $age=$_POST["age"];
+    }
+    if (isset($_POST["type"])){
+        $type=$_POST["type"];
+    }
+    if (isset($_POST["login"])){
+        $login=$_POST["login"];
+    }
+    if (isset($_POST["mdp"])){
+        $mdp=$_POST["mdp"];
+    }
+    if (isset($_POST["mdpcfrm"])){
+        $mdpcfrm=$_POST["mdpcfrm"];
+    }
+
+
+    if($_SESSION["connexion"]=="connected"){
+        header("Location: accueil.php");
+    }
+?>
+
+<!DOCTYPE php>
+<php>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Crèche Conviviale Parfaite - Inscription</title>
+        <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+    </head>
+    <body>
+        <h1 class="titre">
+            Crèche Conviviale Parfaite
+        </h1>
+        
+        <a href="accueil.php">Accueil</a><br/>
+
+        <form>
+            <fieldset>
+                <legend>Formulaire d'inscription</legend>
+
+                <label for="genre" >Genre :</label>
+                <label for="mr">Monsieur</label><input type="radio" name="genre" value="mr"/></br>
+                <label for="mme">Madame</label><input type="radio" name="genre" value="mme"/></br>
+                <label for="x">Autre</label><input type="radio" name="genre" value="x"/></br>
+
+
+                    <label for="prenom">Prénom : </label>
+                    <input type="text" name="prenom" minlength="2" placeholder="Emilie" required></br>
+
+                    <label for="nom" >Nom : </label>
+                    <input type="text" name="nom" minlength="2" placeholder="Dupont" required></br>
+
+                    <label for="email" >Email : </label>
+                    <input type="email" name="email" placeholder="email@gmail.com" required></br>
+                    
+
+                    <label for="age">Date de naissance :</label>
+                    <input type="date" name="age"/></br>
+
+
+                    <label for="login" >Identifiant : </label>
+                    <input type="text" name="login" placeholder="Pseudo" required></br>
+
+                    <label for="mdp" >Mot de passe : </label>
+                    <input type="password" name="mdp" placeholder="********" required></br>
+
+
+                    <label for="mdpcfrm" >Confirmation mot de passe : </label>
+                    <input type="password" name="mdpcfrm" placeholder="********" required></br>
+                    
+
+                <p>Déjà inscrit ? <a href="connexion.php">Connectez vous</a></p>
+            </fieldset>
+        </form>
+        <br><br>
+        <div>
+            <span >Nous contacter :</span>
+            <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
+            <br/>
+        </div>
+        
+    </body>
+</php>

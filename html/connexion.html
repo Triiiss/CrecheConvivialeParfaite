@@ -1,69 +1,88 @@
-<?php
-    session_start();
-    if (isset($_POST["login"])){
-        $login=$_POST["login"];
-    }
-    if (isset($_POST["mdp"])){
-        $mdp=$_POST["mdp"];
-    }
-
-
-    if(isset($_SESSION["connexion"]) && $_SESSION["connexion"]=="connected"){
-        header("Location: accueil.php");
-    }
-?>
-
-<!DOCTYPE php>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
         <title>CCP - Connexion</title>
         <link rel="icon" href="../img/logoPanda.png"/>
         <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
     <body>
-        <h1 class="titre">
-            Crèche Conviviale Parfaite
-        </h1>
-        
-        <a href="accueil.html">Accueil</a><br/>
+        <div did="body">
+            <h1 class="titre">La Crèche Conviviale Parfaite</h1>
 
-        <form id="connexion" action="connexion.php" method="post">
-            <fieldset>
-                <legend>Connexion</legend>
+            <header>
+            <!-- Bannière + liens -->
+                <nav id="banner">
+                    <a v-for="link in filteredLinks" 
+                        :href="link.url" 
+                        :key="link.name"
+                        :class="{ loginLink: link.isLogin }">
+                        {{ link.name }}
+                    </a>
+                    <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
+                    <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
+                    <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
+                    <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
+                </nav>
+            </header>
 
-                <label for="login">Identifiant :</label>
-                <input type="text" name="login" required>
-            
-                </br>
+            <h2>Connexion</h2>
 
-                <label for="password">Mot de passe :</label>
-                <input type="password" name="password" required>
+            <form id="connexion">
+                <fieldset>
+                    <legend>Connexion</legend>
 
-                </br>
+                    <label for="login">Identifiant :</label>
+                    <input type="text" name="login" required>
+                
+                    </br>
 
-                <label for="submit" ></label>
-                <button type="button" class="inscription" name="submit">Se connecter</button>
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" name="password" required>
 
-                <p>Vous n'avez pas encore de compte ? <a href="inscription.html">Inscrivez-vous</a></p>
+                    </br>
 
-            </fieldset>
-        </form>
+                    <button type="button" class="inscription" name="submit">Se connecter</button>
+
+                    <p>Vous n'avez pas encore de compte ? <a href="inscription.html">Inscrivez-vous</a></p>
+
+                </fieldset>
+            </form>
 
 
-        <div id="aboutUs" >
-            <h2>
-            À propos de nous:
-            </h2>
-
-            <p>Zhēn qíng xiàng cǎo yuán guǎng kuò Céng céng fēng yǔ bù néng zǔ gé Zǒng yǒu yún kāi rì chū shí hoù Wàn zhàng yáng guāng zhào yào nǐ wǒ</p>
-            <p> Zhēn qíng xiàng méi huā kāi guò Lěng lěng bīng xuě bù néng yān mò Jiù zài zuì lěng zhī tóu zhàn fàng Kàn jiàn chūn tiān zǒu xiàng nǐ wǒ</p>
-            <p> Xuě huā piāo piāo běi fēng xiāo xiāo Tiān dì yí piàn cāng máng Yì jiǎn hán méi ào lì xuě zhōng Zhǐ wéi yī rén piāo xiāng Ài wǒ suǒ ài wú yuàn wú huǐ Cǐ qíng cháng liú xīn jiān</p>
-
-            <span>Nous contacter :</span>
-            <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
-            <br/>
+            <div id="footer" >
+                <span>Nous contacter :</span>
+                <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
+                <br/>
+            </div>
         </div>
+
+        <script>
+            const { createApp, ref, computed } = Vue
+
+            createApp({
+                setup() {
+
+                const links = ref([
+                    { name: "Accueil", url: "accueil.html" },
+                    { name: "Recherche", url: "recherche.html" },
+                    { name: "Connexion", url: "connexion.html", isLogin: true },
+                    { name: "Inscription", url: "inscription.html", isLogin: true }
+                ])
+
+                // Récupère le nom du fichier actuel
+                const currentPage = window.location.pathname.split("/").pop()
+
+                // Filtrer les liens
+                const filteredLinks = computed(() => {
+                    return links.value.filter(link => link.url !== currentPage)
+                })
+
+                return { filteredLinks }
+                }
+            }).mount("#banner")
+        </script>
         
     </body>
 </html>

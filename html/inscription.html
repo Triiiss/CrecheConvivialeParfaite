@@ -1,107 +1,103 @@
-<?php
-    session_start();
-    if (isset($_POST["genre"])){
-        $genre=$_POST["genre"];
-    }
-    if (isset($_POST["prenom"])){
-        $prenom=$_POST["prenom"];
-    }
-    if (isset($_POST["nom"])){
-        $nom=$_POST["nom"];
-    }
-    if (isset($_POST["email"])){
-        $email=$_POST["email"];
-    }
-    if (isset($_POST["age"])){
-        $age=$_POST["age"];
-    }
-    if (isset($_POST["type"])){
-        $type=$_POST["type"];
-    }
-    if (isset($_POST["login"])){
-        $login=$_POST["login"];
-    }
-    if (isset($_POST["mdp"])){
-        $mdp=$_POST["mdp"];
-    }
-    if (isset($_POST["mdpcfrm"])){
-        $mdpcfrm=$_POST["mdpcfrm"];
-    }
-
-
-    if($_SESSION["connexion"]=="connected"){
-        header("Location: accueil.php");
-    }
-?>
-
-<!DOCTYPE php>
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8"/>
         <title>CCP - Inscription</title>
         <link rel="icon" href="../img/logoPanda.png"/>
         <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
     <body>
-        <h1 class="titre">
-            Crèche Conviviale Parfaite
-        </h1>
-        
-        <a href="accueil.html">Accueil</a><br/>
+        <div id="body">
+            <h1 class="titre">La Crèche Conviviale Parfaite</h1>
+            
+            <header>
+            <!-- Bannière + liens -->
+                <nav id="banner">
+                <a v-for="link in filteredLinks" 
+                    :href="link.url" 
+                    :key="link.name"
+                    :class="{ loginLink: link.isLogin }">
+                    {{ link.name }}
+                </a>
+                <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
+                <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
+                <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
+                <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
+                </nav>
+            </header>
 
-        <form>
-            <fieldset>
-                <legend>Formulaire d'inscription</legend>
+            <h2>Inscription</h2>
 
-                <label for="genre" >Genre :</label>
-                <label for="mr">Monsieur</label><input type="radio" name="genre" value="mr"/></br>
-                <label for="mme">Madame</label><input type="radio" name="genre" value="mme"/></br>
-                <label for="x">Autre</label><input type="radio" name="genre" value="x"/></br>
+            <form id="inscription">
+                <fieldset>
+                    <legend>Formulaire d'inscription</legend>
 
+                    <label for="genre" >Genre :</label><br>
+                    <input type="radio" name="genre" value="mr"/><label for="mr">Monsieur</label></br>
+                    <input type="radio" name="genre" value="mme"/><label for="mme">Madame</label></br>
+                    <input type="radio" name="genre" value="x"/><label for="x">Autre</label></br><br>
 
-                    <label for="prenom">Prénom : </label>
-                    <input type="text" name="prenom" minlength="2" placeholder="Emilie" required></br>
+                        <label for="prenom">Prénom : <span class="required">*</span></label>
+                        <input type="text" name="prenom" minlength="2" placeholder="Emilie" required></br>
 
-                    <label for="nom" >Nom : </label>
-                    <input type="text" name="nom" minlength="2" placeholder="Dupont" required></br>
+                        <label for="nom" >Nom : <span class="required">*</span></label>
+                        <input type="text" name="nom" minlength="2" placeholder="Dupont" required></br>
 
-                    <label for="email" >Email : </label>
-                    <input type="email" name="email" placeholder="email@gmail.com" required></br>
-                    
+                        <label for="email" >Email : <span class="required">*</span></label>
+                        <input type="email" name="email" placeholder="email@gmail.com" required></br>
+                        
 
-                    <label for="age">Date de naissance :</label>
-                    <input type="date" name="age"/></br>
-
-
-                    <label for="login" >Identifiant : </label>
-                    <input type="text" name="login" placeholder="Pseudo" required></br>
-
-                    <label for="mdp" >Mot de passe : </label>
-                    <input type="password" name="mdp" placeholder="********" required></br>
+                        <label for="age">Date de naissance :</label>
+                        <input type="date" name="age"/></br>
 
 
-                    <label for="mdpcfrm" >Confirmation mot de passe : </label>
-                    <input type="password" name="mdpcfrm" placeholder="********" required></br>
-                    
+                        <label for="login" >Identifiant : <span class="required">*</span></label>
+                        <input type="text" name="login" placeholder="Pseudo" required></br>
 
-                <p>Déjà inscrit ? <a href="connexion.html">Connectez vous</a></p>
-            </fieldset>
-        </form>
-        <br><br>
-        
-        <div id="aboutUs" >
-            <h2>
-            À propos de nous:
-            </h2>
+                        <label for="mdp" >Mot de passe : <span class="required">*</span></label>
+                        <input type="password" name="mdp" placeholder="********" required></br>
 
-            <p>Zhēn qíng xiàng cǎo yuán guǎng kuò Céng céng fēng yǔ bù néng zǔ gé Zǒng yǒu yún kāi rì chū shí hoù Wàn zhàng yáng guāng zhào yào nǐ wǒ</p>
-            <p> Zhēn qíng xiàng méi huā kāi guò Lěng lěng bīng xuě bù néng yān mò Jiù zài zuì lěng zhī tóu zhàn fàng Kàn jiàn chūn tiān zǒu xiàng nǐ wǒ</p>
-            <p> Xuě huā piāo piāo běi fēng xiāo xiāo Tiān dì yí piàn cāng máng Yì jiǎn hán méi ào lì xuě zhōng Zhǐ wéi yī rén piāo xiāng Ài wǒ suǒ ài wú yuàn wú huǐ Cǐ qíng cháng liú xīn jiān</p>
 
-            <span>Nous contacter :</span>
-            <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
-            <br/>
+                        <label for="mdpcfrm" >Confirmation mot de passe : <span class="required">*</span></label>
+                        <input type="password" name="mdpcfrm" placeholder="********" required></br>
+                        
+                        <button type="button" class="inscription" name="submit">S'inscrire</button>
+                    <p>Déjà inscrit ? <a href="connexion.html">Connectez vous</a></p>
+                </fieldset>
+            </form>
+            
+            <div id="footer" >
+                <span>Nous contacter :</span>
+                <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
+                <br/>
+            </div>
         </div>
-        
+        <script>
+            const { createApp, ref, computed } = Vue
+
+            createApp({
+                setup() {
+
+                const links = ref([
+                    { name: "Accueil", url: "accueil.html" },
+                    { name: "Recherche", url: "recherche.html" },
+                    { name: "Connexion", url: "connexion.html", isLogin: true },
+                    { name: "Inscription", url: "inscription.html", isLogin: true }
+                ])
+
+                // Récupère le nom du fichier actuel
+                const currentPage = window.location.pathname.split("/").pop()
+
+                // Filtrer les liens
+                const filteredLinks = computed(() => {
+                    return links.value.filter(link => link.url !== currentPage)
+                })
+
+                return { filteredLinks }
+                }
+            }).mount("#banner")
+        </script>
+
     </body>
 </html>

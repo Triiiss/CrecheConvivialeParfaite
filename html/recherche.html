@@ -7,31 +7,272 @@
         <link rel="icon" href="../img/logoPanda.png"/>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
-    <body>
-        <div id="app">
-            <p>Hello, {{name}}!</p>
-        </div>
-        <div id="aboutUs" >
-            <h2>
-            À propos de nous:
-            </h2>
+    <body> 
+        <div id="body">
+            <h1>La Crèche Conviviale et Parfaite</h1>
+            
+            <header>
+            <!-- Bannière -->
+                <nav id="banner">
+                    <a v-for="link in filteredLinks" 
+                        :href="link.url" 
+                        :key="link.name"
+                        :class="{ loginLink: link.isLogin }">
+                        {{ link.name }}
+                    </a>
+                    <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
+                    <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
+                    <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
+                    <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
+                </nav>
+            </header>
 
-            <p>Zhēn qíng xiàng cǎo yuán guǎng kuò Céng céng fēng yǔ bù néng zǔ gé Zǒng yǒu yún kāi rì chū shí hoù Wàn zhàng yáng guāng zhào yào nǐ wǒ</p>
-            <p> Zhēn qíng xiàng méi huā kāi guò Lěng lěng bīng xuě bù néng yān mò Jiù zài zuì lěng zhī tóu zhàn fàng Kàn jiàn chūn tiān zǒu xiàng nǐ wǒ</p>
-            <p> Xuě huā piāo piāo běi fēng xiāo xiāo Tiān dì yí piàn cāng máng Yì jiǎn hán méi ào lì xuě zhōng Zhǐ wéi yī rén piāo xiāng Ài wǒ suǒ ài wú yuàn wú huǐ Cǐ qíng cháng liú xīn jiān</p>
+            <div id="search">
+                <h2>Rechercher des informations</h2>
 
-            <span>Nous contacter :</span>
-            <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
-            <br/>
+                <!-- Recherche -->
+                <input v-model="searchText" placeholder="Rechercher un élément..." />
+
+                <select v-model="place">
+                    <option value="">Tous les lieux</option>
+                    <option value="aile-ouest">Aile Ouest</option>
+                    <option value="aile-est">Aile Est</option>
+                    <option value="salle-principale">Salle principale</option>
+                    <option value="exterieur">Exterieur</option>
+                </select>
+
+                <select v-model="target">
+                    <option value="">Tout public</option>
+                    <option value="parent">Parent</option>
+                    <option value="enfant-0-5">Enfant < 5 ans</option>
+                    <option value="enfant-5-10">Enfant 5–10 ans</option>
+                    <option value="encadrant">Encadrant</option>
+                </select>
+
+                <select v-model="category">
+                    <option value="">Toutes les catégories</option>
+                    <option value="transport">Transport</option>
+                    <option value="divertissement">Divertissement</option>
+                    <option value="nourriture">Nourriture</option>
+                    <option value="activite">Activité</option>
+                    <option value="cours">Cours</option>
+                </select>
+
+                <select v-model="dateFilter">
+                    <option value="">Toutes les dates</option>
+                    <option value="before">Avant</option>
+                    <option value="after">Après</option>
+                    <option value="on">Le jour même</option>
+                </select>
+
+                <input type="date" v-model="selectedDate" />
+
+                <div class="grid">
+                    <div class="card" v-for="item in filteredItems" :key="item.name">
+                        <strong>Nom : {{ item.name }}</strong><br>
+                        Endroit : {{ item.place }}<br>
+                        Public : {{ item.target }}<br>
+                        Catégorie : {{ item.category }}<br>
+                        Date : {{ item.date }}
+                    </div>
+                </div>
+            </div>
+            
+            <div id="footer" >
+                <span>Nous contacter :</span>
+                <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
+                <br/>
+            </div>
         </div>
+
         <script>
-            const {createApp, ref} = Vue
+            const { createApp, ref, computed } = Vue
+
+            createApp({
+            setup() {
+
+                // ===== FILTRES =====
+                const searchText = ref("")
+                const place = ref("")
+                const target = ref("")
+                const category = ref("")
+                const dateFilter = ref("")
+                const selectedDate = ref("")
+
+                // ===== DONNÉES =====
+                const items = ref([
+                    {
+                        name: "Parc sécurisé à proximité",
+                        place: "aile-ouest",
+                        target: "parent",
+                        category: "activite",
+                        date: "tout-le-temps"
+                    },
+                    {
+                        name: "Pharmacie enfant à 200m",
+                        place: "exterieur",
+                        target: "parent",
+                        category: "transport",
+                        date: "tout-le-temps"
+                    },
+                    {
+                        name: "Atelier peinture sensorielle",
+                        place: "salle-principale",
+                        target: "enfant-0-5",
+                        category: "activite",
+                        date: "2026-05-10"
+                    },
+                    {
+                        name: "Jeux d’éveil musical",
+                        place: "salle-principale",
+                        target: "enfant-0-5",
+                        category: "divertissement",
+                        date: "2026-05-12"
+                    },
+                    {
+                        name: "Construction LEGO géant",
+                        place: "aile-est",
+                        target: "enfant-5-10",
+                        category: "divertissement",
+                        date: "2026-05-15"
+                    },
+                    {
+                        name: "Lecture interactive contes",
+                        place: "salle-principale",
+                        target: "enfant-5-10",
+                        category: "cours",
+                        date: "2026-05-18"
+                    },
+                    {
+                        name: "Goûter bio équilibré",
+                        place: "salle-principale",
+                        target: "enfant-0-5",
+                        category: "nourriture",
+                        date: "tout-le-temps"
+                    },
+                    {
+                        name: "Découverte fruits exotiques",
+                        place: "aile-ouest",
+                        target: "enfant-5-10",
+                        category: "nourriture",
+                        date: "2026-05-20"
+                    },
+                    {
+                        name: "Bus scolaire sécurisé crèche",
+                        place: "exterieur",
+                        target: "parent",
+                        category: "transport",
+                        date: "tout-le-temps"
+                    },
+                    {
+                        name: "Zone dépose-minute parents",
+                        place: "exterieur",
+                        target: "parent",
+                        category: "transport",
+                        date: "tout-le-temps"
+                    },
+
+                    {
+                        name: "Initiation musique et rythme",
+                        place: "salle-principale",
+                        target: "enfant-5-10",
+                        category: "cours",
+                        date: "2026-05-22"
+                    },
+                    {
+                        name: "Apprentissage des émotions",
+                        place: "aile-ouest",
+                        target: "enfant-0-5",
+                        category: "cours",
+                        date: "2026-05-25"
+                    },
+                    {
+                        name: "Fête de la crèche",
+                        place: "salle-principale",
+                        target: "parent",
+                        category: "divertissement",
+                        date: "2026-06-01"
+                    },
+                    {
+                        name: "Spectacle marionnettes",
+                        place: "salle-principale",
+                        target: "enfant-0-5",
+                        category: "divertissement",
+                        date: "2026-05-30"
+                    },
+                    {
+                        name: "Journée portes ouvertes",
+                        place: "aile-est",
+                        target: "parent",
+                        category: "divertissement",
+                        date: "2026-06-05"
+                    }
+                ])
+
+                // ===== FILTRE =====
+                const filteredItems = computed(() => {
+                    return items.value.filter(item => {
+
+                        const matchName =
+                        item.name.toLowerCase().includes(searchText.value.toLowerCase())
+
+                        const matchPlace =
+                        place.value === "" || item.place === place.value
+
+                        const matchTarget =
+                        target.value === "" || item.target === target.value
+
+                        const matchCategory =
+                        category.value === "" || item.category === category.value
+
+                        let matchDate = true
+
+                        if (dateFilter.value === "before") {
+                        matchDate = item.date <= selectedDate.value
+                        } else if (dateFilter.value === "after") {
+                        matchDate = item.date >= selectedDate.value
+                        } else if (dateFilter.value === "on") {
+                        matchDate = item.date === selectedDate.value
+                        }
+
+                        return matchName && matchPlace && matchTarget && matchCategory && matchDate
+                    }).slice(0, 8)
+                })
+
+                return {
+                searchText,
+                place,
+                target,
+                category,
+                dateFilter,
+                selectedDate,
+                filteredItems
+                }
+            }
+            }).mount("#search")
+    
+
             createApp({
                 setup() {
-                    const name = ref("Rachel")
-                    return {name}
+
+                const links = ref([
+                    { name: "Accueil", url: "accueil.html" },
+                    { name: "Recherche", url: "recherche.html" },
+                    { name: "Connexion", url: "connexion.html", isLogin: true },
+                    { name: "Inscription", url: "inscription.html", isLogin: true }
+                ])
+
+                // Récupère le nom du fichier actuel
+                const currentPage = window.location.pathname.split("/").pop()
+
+                // Filtrer les liens
+                const filteredLinks = computed(() => {
+                    return links.value.filter(link => link.url !== currentPage)
+                })
+
+                return { filteredLinks }
                 }
-            }).mount("#app")
+            }).mount("#banner")
         </script>
     </body>
 </html>

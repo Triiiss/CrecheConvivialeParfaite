@@ -1,20 +1,9 @@
-/*! HTML5 Boilerplate v9.0.1 | MIT License | https://html5boilerplate.com/ */
-
-/* main.css 3.0.0 | MIT License | https://github.com/h5bp/main.css#readme */
-/*
- * What follows is the result of much research on cross-browser styling.
- * Credit left inline and big thanks to Nicolas Gallagher, Jonathan Neal,
- * Kroc Camen, and the H5BP dev community and team.
- */
-
 body {
-  margin: 0;
-  min-height: 100vh;
+  height: 65vw;
 
-  background-image: url("../img/backGroundPic.webp");
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgb(236, 172, 161) 90%), url("../img/backGroundPic.webp") no-repeat center 50% / contain;
+  background-color: rgb(236, 172, 161);
   background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
 }
 
 h1{
@@ -69,13 +58,17 @@ header{
 #banner a.loginLink {
   float : right;
   margin-right : 120px;
-  color: rgb(12,255,255);
+  color: rgb(255, 24, 24);
   text-decoration: none;
   font-size: 20px;
   font-weight: bold;
+  text-shadow: -1px -1px 0 #ffffff,  /* Contour en noir */
+                1px -1px 0 #ffffff,
+                -1px 1px 0 #ffffff,
+                1px 1px 0 #ffffff;
 }
 #banner a.loginLink:hover{
-  text-decoration:underline; /* Sous ligne le lien lorsque la souris est dessus */
+  color: rgb(190, 6, 6);
 }
 /*
 ==========================================================
@@ -83,7 +76,7 @@ header{
 
 /* Intro de la crèche */
 
-#aboutUsAccueil{
+#aboutUs{
   color : #2C3E50;
   text-decoration: none;
   font-size: 30px;
@@ -91,3 +84,125 @@ header{
   text-align: left;
   margin-left: 120px;
 }
+
+#footer{
+  text-align: left;
+  color : #0f1011;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-top: 250px;
+}
+
+/*
+CONNEXION & INSCRIPTION
+*/
+
+#connexion, #inscription{
+  background-color: #f4f4f4;
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+}
+#connexion{
+  width: 350px;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+#inscription {
+  width: 400px;
+  margin: 40px auto;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Cadre (fieldset) */
+#connexion fieldset, #inscription fieldset {
+  border: none;
+}
+
+/* Titre */
+#connexion legend, #inscription legend {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Labels */
+#connexion label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Inputs */
+#connexion input,#inscription input[type="text"],
+#inscription input[type="email"],
+#inscription input[type="password"],
+#inscription input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Radio boutons (alignés proprement) */
+#inscription input[type="radio"] {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+#inscription label[for="mr"],
+#inscription label[for="mme"],
+#inscription label[for="x"] {
+  display: inline;
+  font-weight: normal;
+}
+
+/* Focus (quand on clique dedans) */
+#connexion input:focus,#inscription input:focus {
+  border-color: rgb(255, 24, 24);
+  outline: none;
+}
+
+/* Bouton */
+#connexion button, #inscription button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: rgb(255, 24, 24);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Hover bouton */
+#connexion button:hover, #inscription button:hover {
+  background-color: rgb(190, 6, 6);
+}
+
+/* Texte en bas */
+#connexion p, #inscription p {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Lien inscription */
+#connexion a, #inscription a {
+  color: rgb(255, 24, 24);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#connexion a:hover, #inscription a:hover {
+  text-decoration: underline;
+}
+
+

@@ -11,14 +11,14 @@
 
   <body>
     <!-- Entête de la page -->
-    <div id="body">
+    <div id="app">
       <h1>La Crèche Conviviale et Parfaite</h1>
-      
+
       <header>
       <!-- Bannière + liens -->
         <nav id="banner">
-          <a v-for="link in filteredLinks" 
-            :href="link.url" 
+          <a v-for="link in filteredLinks"
+            :href="link.url"
             :key="link.name"
             :class="{ loginLink: link.isLogin }">
             {{ link.name }}
@@ -30,14 +30,48 @@
         </nav>
       </header>
       <!-- Introduction de la crèche -->
-        
-        <h2>À propos de nous:</h2>
-        <div id="aboutUs" >
 
-            <p>Zhēn qíng xiàng cǎo yuán guǎng kuò Céng céng fēng yǔ bù néng zǔ gé Zǒng yǒu yún kāi rì chū shí hoù Wàn zhàng yáng guāng zhào yào nǐ wǒ</p>
-            <p> Zhēn qíng xiàng méi huā kāi guò Lěng lěng bīng xuě bù néng yān mò Jiù zài zuì lěng zhī tóu zhàn fàng Kàn jiàn chūn tiān zǒu xiàng nǐ wǒ</p>
-            <p> Xuě huā piāo piāo běi fēng xiāo xiāo Tiān dì yí piàn cāng máng Yì jiǎn hán méi ào lì xuě zhōng Zhǐ wéi yī rén piāo xiāng Ài wǒ suǒ ài wú yuàn wú huǐ Cǐ qíng cháng liú xīn jiān</p>
+      <h2>À propos de nous:</h2>
+
+      <div class="aboutUs">
+        <div class="aboutUsBox">
+
+          <p>
+            Notre crèche accueille les enfants de moins 3 ans où chaque journée sont remplies de joies et de bonheurs,
+            ils pourront se promener, jouer, faire la sieste, s'amuser avec leurs amis, et bien plus !!!
+          </p>
+
+          <p>
+            Votre enfant sera prêt pour le grand bain qu'est la maternelle, nous leurs apprendrons de nombreuses choses,
+            comme les valeurs du partage, de l'ordre social, de la sérénité, la stabilité, et Winnie l'ourson. Ils seront
+            notés selon un système de crédit, où plus ils en ont plus ils auront accès à des avantages au sein de la crèche.
+            Toutefois, s'il venait que votre enfant soit un vilain petit enfant, il perdra des points et n'aura pas accès
+            à certains services comme la récréation avec jouets.
+          </p>
         </div>
+      </div>
+
+      <h2>Avis des utilisateurs:</h2>
+
+
+      <div class="reviews">
+
+        <div class="review" v-for="(review, index) in paginatedReviews" :key="review.id" :class="{ right: index % 2 === 1, left: index % 2 === 0 }">
+
+          <img class="pfp" :src="review.pfp" alt="photo de profil" />
+          <h4>{{ review.user }}</h4>
+          <p>{{ review.text }}</p>
+
+        </div>
+
+      </div>
+      <!-- Bouton pour les avis -->
+      <div class="page">
+        <button v-for="n in totalPages" :key="n" @click="currentReviewPage = n - 1">
+          {{ n }}
+        </button>
+      </div>
+
 
         <div id="footer" >
             <span>Nous contacter :</span>
@@ -51,6 +85,7 @@
 
         createApp({
             setup() {
+
 
               const links = ref([
                 { name: "Accueil", url: "accueil.html" },
@@ -67,9 +102,36 @@
                 return links.value.filter(link => link.url !== currentPage)
               })
 
-              return { filteredLinks }
+              /*
+              Partie sur les avis utilisateurs
+              */
+
+              const reviews = ref([
+                { id: 1, user: "Bébé avec des problèmes", text: "Gooooo Gaagaaaaaaaaaaaaa. CACAAAAAAAAAAAAAAA!", pfp:"../img/dumbBaby.jpeg"},
+                { id: 2, user: "Tuff", text: "Ahaaahaaahahahahahahaahahahah.", pfp:"../img/tuffBaby.jpeg"},
+                { id: 3, user: "Charlie K.", text: "WE ARE CHARLIE KIRKKKKKKKKKKKKKKKKKKKKKKKK", pfp:"../img/kirk.jpeg"},
+                { id: 4, user: "Da Baby", text: "Gaaga. Baabaaaaaaaaaa!", pfp:"../img/DaBaby.jpeg"},
+                { id: 5, user: "The Rizzler", text: "Mogged", pfp:"../img/theRizzler.jpeg"},
+                { id: 6, user: "Jeff E.", text: "J'adore, on ressent la fraicheur des produits à disposition, je recommande cette " +
+                    "crêche à tout milliardiaires", pfp:"../img/BigE.jpeg"},
+                { id: 7, user: "P DD", text: "J'ai déménagé des Los Angeles juste pour cette crêche, qui est incroyable !!", pfp:"../img/pdd.jpeg"},
+                { id: 8, user: "Parent A", text: "Rien à dire, parfait.", pfp:"../img/anonymous.png"}
+              ])
+
+              const currentReviewPage = ref(0)
+              const reviewsPerPage = 3
+              const paginatedReviews = computed(() => {
+                const start = currentReviewPage.value * reviewsPerPage
+                return reviews.value.slice(start, start + reviewsPerPage)
+              })
+
+              const totalPages = computed(() =>
+                Math.ceil(reviews.value.length / reviewsPerPage)
+              )
+
+              return { filteredLinks, totalPages, reviews, currentReviewPage, reviewsPerPage, paginatedReviews}
             }
-        }).mount("#banner")
+        }).mount("#app")
     </script>
   </body>
 

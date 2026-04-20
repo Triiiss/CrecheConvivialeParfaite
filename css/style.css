@@ -93,24 +93,20 @@ header{
 }
 
 .aboutUsBox {
-  width: 100%;              /* 👈 prend presque toute la largeur */
-  max-width: 1600px;       /* 👈 évite que ça devienne trop large sur grand écran */
-
-  background: rgba(30, 30, 30, 0.65); /* 👈 accord avec ton bandeau gris */
+  width: 100%;
+  max-width: 1600px;
+  background: rgba(30, 30, 30, 0.65);
   color: white;
-
   padding: 40px;
   border-radius: 12px;
-
   box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-
-  backdrop-filter: blur(6px); /* effet moderne sur fond image */
+  backdrop-filter: blur(6px);
 }
 
 .aboutUsBox p {
   line-height: 1.7;
   margin-bottom: 15px;
-  font-size: 20px;
+  font-size: 30px;
   color: #eaeaea;
 }
 

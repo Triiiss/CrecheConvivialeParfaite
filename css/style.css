@@ -36,15 +36,16 @@ header{
 
 /* Bannière des liens */
 #banner{
-  background: rgba(78, 12, 12, 0.4);
+  background: rgba(0,0,0,0.4);
   padding: 15px;
+  overflow : auto;
 }
 
 /* Liens */
 #banner a{
   color: white;
   text-decoration: none;
-  margin: 0px 15px;
+  margin: 0px 20px;
   font-size: 20px;
   font-weight: bold;
 }
@@ -56,15 +57,15 @@ header{
 /* Lien vers page d'inscription*/
 #banner a.loginLink {
   float : right;
-  margin-right : 20px;
+  margin-right : 120px;
   color: rgb(255, 24, 24);
   text-decoration: none;
   font-size: 20px;
   font-weight: bold;
   text-shadow: -1px -1px 0 #ffffff,  /* Contour en noir */
-                1px -1px 0 #ffffff,
-                -1px 1px 0 #ffffff,
-                1px 1px 0 #ffffff;
+  1px -1px 0 #ffffff,
+  -1px 1px 0 #ffffff,
+  1px 1px 0 #ffffff;
 }
 #banner a.loginLink:hover{
   color: rgb(190, 6, 6);
@@ -75,14 +76,6 @@ header{
 
 /* Intro de la crèche */
 
-#aboutUs{
-  color : #2C3E50;
-  text-decoration: none;
-  font-size: 30px;
-  font-weight: bold;
-  text-align: left;
-  margin-left: 120px;
-}
 
 #footer{
   text-align: left;
@@ -90,6 +83,83 @@ header{
   font-weight: bold;
   margin-left: 20px;
   margin-top: 250px;
+}
+
+.aboutUs {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.aboutUsBox {
+  width: 100%;              /* 👈 prend presque toute la largeur */
+  max-width: 1600px;       /* 👈 évite que ça devienne trop large sur grand écran */
+
+  background: rgba(30, 30, 30, 0.65); /* 👈 accord avec ton bandeau gris */
+  color: white;
+
+  padding: 40px;
+  border-radius: 12px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+
+  backdrop-filter: blur(6px); /* effet moderne sur fond image */
+}
+
+.aboutUsBox p {
+  line-height: 1.7;
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #eaeaea;
+}
+
+/*
+AVIS UTILISATEUR
+ */
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review {
+  font-size: 30px;
+  min-width: 1000px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pfp {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* effet gauche/ droite pour les reviews */
+.review.left {
+  align-self: flex-start;
+  margin-left: 120px;
+}
+
+
+.review.right {
+  align-self: flex-end;
+  text-align: right;
+  margin-right: 120px;
 }
 
 /*
@@ -204,28 +274,3 @@ CONNEXION & INSCRIPTION
   text-decoration: underline;
 }
 
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.card {
-  background: white;
-  padding: 12px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  transition: 0.2s;
-}
-
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
-}
-
-.card strong {
-  display: block;
-  margin-bottom: 8px;
-  color: rgb(255, 24, 24);
-}

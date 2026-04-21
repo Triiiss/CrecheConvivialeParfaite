@@ -7,15 +7,15 @@
         <link rel="icon" href="../img/logoPanda.png"/>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
-    <body> 
+    <body>
         <div id="body">
             <h1>La Crèche Conviviale et Parfaite</h1>
-            
+
             <header>
             <!-- Bannière -->
                 <nav id="banner">
-                    <a v-for="link in filteredLinks" 
-                        :href="link.url" 
+                    <a v-for="link in filteredLinks"
+                        :href="link.url"
                         :key="link.name"
                         :class="{ loginLink: link.isLogin }">
                         {{ link.name }}
@@ -77,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div id="footer" >
                 <span>Nous contacter :</span>
                 <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
@@ -250,7 +250,7 @@
                 }
             }
             }).mount("#search")
-    
+
 
             createApp({
                 setup() {
@@ -258,6 +258,7 @@
                 const links = ref([
                     { name: "Accueil", url: "accueil.html" },
                     { name: "Recherche", url: "recherche.html" },
+                  { name: "Profil", url: "profil.html"},
                     { name: "Connexion", url: "connexion.html", isLogin: true },
                     { name: "Inscription", url: "inscription.html", isLogin: true }
                 ])

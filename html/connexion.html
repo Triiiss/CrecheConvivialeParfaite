@@ -1,89 +1,90 @@
 <!DOCTYPE html>
 <html>
-    {% load static %}
-    <head>
-        <meta charset="utf-8"/>
-        <title>CCP - Connexion</title>
-        <link rel="icon" href="/static//img/logoPanda.png"/>
-        <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    </head>
-    <body>
-        <div id="body">
-            <h1 class="titre">La Crèche Conviviale Parfaite</h1>
+{% load static %}
+<head>
+  <meta charset="utf-8"/>
+  <title>CCP - Connexion</title>
+  <link rel="icon" href="/static//img/logoPanda.png"/>
+  <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+<div id="body">
+  <h1 class="titre">La Crèche Conviviale Parfaite</h1>
 
-            <header>
-            <!-- Bannière + liens -->
-                <nav id="banner">
-                    <a v-for="link in filteredLinks" 
-                        :href="link.url" 
-                        :key="link.name"
-                        :class="{ loginLink: link.isLogin }">
-                        {{ link.name }}
-                    </a>
-                    <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
-                    <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
-                    <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
-                    <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
-                </nav>
-            </header>
+  <header>
+    <!-- Bannière + liens -->
+    <nav id="banner">
+      <a v-for="link in filteredLinks"
+         :href="link.url"
+         :key="link.name"
+         :class="{ loginLink: link.isLogin }">
+        {{ link.name }}
+      </a>
+      <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
+      <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
+      <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
+      <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
+    </nav>
+  </header>
 
-            <h2>Connexion</h2>
+  <h2>Connexion</h2>
 
-            <form id="connexion">
-                <fieldset>
-                    <legend>Connexion</legend>
+  <form id="connexion">
+    <fieldset>
+      <legend>Connexion</legend>
 
-                    <label for="login">Identifiant :</label>
-                    <input type="text" name="login" required>
-                
-                    <br>
+      <label for="login">Identifiant :</label>
+      <input type="text" name="login" required>
 
-                    <label for="password">Mot de passe :</label>
-                    <input type="password" name="password" required>
+      <br>
 
-                    <br>
+      <label for="password">Mot de passe :</label>
+      <input type="password" name="password" required>
 
-                    <button type="button" class="inscription" name="submit">Se connecter</button>
+      <br>
 
-                    <p>Vous n'avez pas encore de compte ? <a href="/inscription/">Inscrivez-vous</a></p>
+      <button type="button" class="inscription" name="submit">Se connecter</button>
 
-                </fieldset>
-            </form>
+      <p>Vous n'avez pas encore de compte ? <a href="/inscription/">Inscrivez-vous</a></p>
+
+    </fieldset>
+  </form>
 
 
-            <div id="footer" >
-                <span>Nous contacter :</span>
-                <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
-                <br/>
-            </div>
-        </div>
+  <div id="footer" >
+    <span>Nous contacter :</span>
+    <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
+    <br/>
+  </div>
+</div>
 
-        <script>
-            const { createApp, ref, computed } = Vue
+<script>
+  const { createApp, ref, computed } = Vue
 
-            createApp({
-                setup() {
+  createApp({
+    setup() {
 
-                const links = ref([
-                    { name: "Accueil", url: "/accueil/" },
-                    { name: "Recherche", url: "/recherche/" },
-                    { name: "Connexion", url: "/connexion/", isLogin: true },
-                    { name: "Inscription", url: "/inscription/", isLogin: true }
-                ])
+      const links = ref([
+        { name: "Accueil", url: "/accueil/" },
+        { name: "Recherche", url: "/recherche/" },
+        { name: "Profil", url: "profil.html"},
+        { name: "Connexion", url: "connexion.html", isLogin: true },
+        { name: "Inscription", url: "inscription.html", isLogin: true }
+      ])
 
-                // Récupère le nom du fichier actuel
-                const currentPage = window.location.pathname.split("/").pop()
+      // Récupère le nom du fichier actuel
+      const currentPage = window.location.pathname.split("/").pop()
 
-                // Filtrer les liens
-                const filteredLinks = computed(() => {
-                    return links.value.filter(link => link.url !== currentPage)
-                })
+      // Filtrer les liens
+      const filteredLinks = computed(() => {
+        return links.value.filter(link => link.url !== currentPage)
+      })
 
-                return { filteredLinks }
-                }
-            }).mount("#banner")
-        </script>
-        
-    </body>
+      return { filteredLinks }
+    }
+  }).mount("#banner")
+</script>
+
+</body>
 </html>

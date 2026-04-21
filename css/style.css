@@ -270,3 +270,28 @@ CONNEXION & INSCRIPTION
   text-decoration: underline;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.card strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #1f3b57;
+}

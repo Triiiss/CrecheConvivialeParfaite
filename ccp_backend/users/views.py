@@ -18,17 +18,20 @@ def connexion_view(request):
 
 def inscription_view(request):
     if request.method == "POST":
-        gender = request.POST.get("gender")
+        gender = request.POST.get("gender") or "x"
         name = request.POST.get("name")
         surname = request.POST.get("surname")
-        age = request.POST.get("age")
+        age = request.POST.get("age") or None
         username = request.POST.get("username")
         email = request.POST.get("email")
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
+
         if password1 == password2:
             User.objects.create_user(
+                gender=gender,
+                surname=surname,
                 name=name,
                 username=username,
                 email=email,
@@ -37,3 +40,13 @@ def inscription_view(request):
             return redirect("connexion")
 
     return render(request, "inscription.html")
+
+
+def accueil_view(request):
+    return render(request, 'accueil.html')
+
+def recherche_view(request):
+    return render(request, 'recherche.html')
+
+def profil_view(request):
+    return render(request, 'profil.html')

@@ -1,0 +1,297 @@
+body {
+  height: 65vw;
+
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 50%, rgb(236, 172, 161) 90%), url("../img/backGroundPic.webp") no-repeat center 50% / contain;
+  background-color: rgb(236, 172, 161);
+  background-size: cover;
+}
+
+h1{
+  color:white;
+  font-size: 48px;
+  text-shadow: 0 0 10px rgba(0,0,0,0.7);
+  margin-bottom: 20px;
+}
+
+h2{
+  color : white;
+  text-shadow: 2px 2px 6px rgba(0,0,0,0.6);
+  text-decoration: none;
+  font-size: 50px;
+  font-weight: bold;
+  text-align: left;
+  margin-left: 20px;
+}
+
+
+
+/*
+===================================================
+ */
+
+/* Partie haute de la page */
+header{
+  text-align:center;
+}
+
+/* Bannière des liens */
+#banner{
+  background: rgba(0,0,0,0.4);
+  padding: 15px;
+  overflow : auto;
+}
+
+/* Liens */
+#banner a{
+  color: white;
+  text-decoration: none;
+  margin: 0px 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#banner a:hover{
+  text-decoration:underline; /* Sous ligne le lien lorsque la souris est dessus */
+}
+
+/* Lien vers page d'inscription*/
+#banner a.loginLink {
+  float : right;
+  margin-right : 120px;
+  color: rgb(255, 24, 24);
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: -1px -1px 0 #ffffff,  /* Contour en noir */
+  1px -1px 0 #ffffff,
+  -1px 1px 0 #ffffff,
+  1px 1px 0 #ffffff;
+}
+#banner a.loginLink:hover{
+  color: rgb(190, 6, 6);
+}
+/*
+==========================================================
+ */
+
+/* Intro de la crèche */
+
+
+#footer{
+  text-align: left;
+  color : #0f1011;
+  font-weight: bold;
+  margin-left: 20px;
+  margin-top: 250px;
+}
+
+.aboutUs {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 20px;
+}
+
+.aboutUsBox {
+  width: 100%;
+  max-width: 1600px;
+  background: rgba(30, 30, 30, 0.65);
+  color: white;
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+}
+
+.aboutUsBox p {
+  line-height: 1.7;
+  margin-bottom: 15px;
+  font-size: 30px;
+  color: #eaeaea;
+}
+
+/*
+AVIS UTILISATEUR
+ */
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.review {
+  font-size: 30px;
+  min-width: 1000px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0,0,0,0.2);
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pfp {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* effet gauche/ droite pour les reviews */
+.review.left {
+  align-self: flex-start;
+  margin-left: 120px;
+}
+
+
+.review.right {
+  align-self: flex-end;
+  text-align: right;
+  margin-right: 120px;
+}
+
+/*
+CONNEXION & INSCRIPTION
+*/
+
+#connexion, #inscription{
+  background-color: #f4f4f4;
+  border-radius: 12px;
+  font-family: Arial, sans-serif;
+}
+#connexion{
+  width: 350px;
+  margin: 50px auto;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+#inscription {
+  width: 400px;
+  margin: 40px auto;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Cadre (fieldset) */
+#connexion fieldset, #inscription fieldset {
+  border: none;
+}
+
+/* Titre */
+#connexion legend, #inscription legend {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+/* Labels */
+#connexion label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* Inputs */
+#connexion input,#inscription input[type="text"],
+#inscription input[type="email"],
+#inscription input[type="password"],
+#inscription input[type="date"] {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Radio boutons (alignés proprement) */
+#inscription input[type="radio"] {
+  margin-left: 10px;
+  margin-right: 5px;
+}
+
+#inscription label[for="mr"],
+#inscription label[for="mme"],
+#inscription label[for="x"] {
+  display: inline;
+  font-weight: normal;
+}
+
+/* Focus (quand on clique dedans) */
+#connexion input:focus,#inscription input:focus {
+  border-color: rgb(255, 24, 24);
+  outline: none;
+}
+
+/* Bouton */
+#connexion button, #inscription button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: rgb(255, 24, 24);
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+/* Hover bouton */
+#connexion button:hover, #inscription button:hover {
+  background-color: rgb(190, 6, 6);
+}
+
+/* Texte en bas */
+#connexion p, #inscription p {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 14px;
+}
+
+/* Lien inscription */
+#connexion a, #inscription a {
+  color: rgb(255, 24, 24);
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#connexion a:hover, #inscription a:hover {
+  text-decoration: underline;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.card {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.12);
+}
+
+.card strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #1f3b57;
+}

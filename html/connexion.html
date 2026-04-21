@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
+    {% load static %}
     <head>
         <meta charset="utf-8"/>
         <title>CCP - Connexion</title>
-        <link rel="icon" href="../img/logoPanda.png"/>
-        <link rel="stylesheet" type="text/css" href="../css/style.css"/>
+        <link rel="icon" href="/static//img/logoPanda.png"/>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
     <body>
-        <div did="body">
+        <div id="body">
             <h1 class="titre">La Crèche Conviviale Parfaite</h1>
 
             <header>
@@ -36,16 +37,16 @@
                     <label for="login">Identifiant :</label>
                     <input type="text" name="login" required>
                 
-                    </br>
+                    <br>
 
                     <label for="password">Mot de passe :</label>
                     <input type="password" name="password" required>
 
-                    </br>
+                    <br>
 
                     <button type="button" class="inscription" name="submit">Se connecter</button>
 
-                    <p>Vous n'avez pas encore de compte ? <a href="inscription.html">Inscrivez-vous</a></p>
+                    <p>Vous n'avez pas encore de compte ? <a href="/inscription/">Inscrivez-vous</a></p>
 
                 </fieldset>
             </form>
@@ -65,10 +66,10 @@
                 setup() {
 
                 const links = ref([
-                    { name: "Accueil", url: "accueil.html" },
-                    { name: "Recherche", url: "recherche.html" },
-                    { name: "Connexion", url: "connexion.html", isLogin: true },
-                    { name: "Inscription", url: "inscription.html", isLogin: true }
+                    { name: "Accueil", url: "/accueil/" },
+                    { name: "Recherche", url: "/recherche/" },
+                    { name: "Connexion", url: "/connexion/", isLogin: true },
+                    { name: "Inscription", url: "/inscription/", isLogin: true }
                 ])
 
                 // Récupère le nom du fichier actuel

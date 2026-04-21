@@ -270,6 +270,10 @@ CONNEXION & INSCRIPTION
   text-decoration: underline;
 }
 
+span.required{
+  color: red;
+}
+
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

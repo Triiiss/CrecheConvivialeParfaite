@@ -258,19 +258,19 @@
                 setup() {
 
                 const links = ref([
-                    { name: "Accueil", url: "/accueil/" },
-                    { name: "Recherche", url: "/recherche/" },
-                    { name: "Profil", url: "/profil/"},
-                    { name: "Connexion", url: "/connexion/", isLogin: true },
-                    { name: "Inscription", url: "/inscription/", isLogin: true }
+                { name: "Accueil", url: "/accueil/", slug:"accueil"},
+                { name: "Recherche", url: "/recherche/", slug:"recherche" },
+                { name: "Profil", url: "/profil/", slug:"profil"},
+                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion" },
+                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription" }
                 ])
 
                 // Récupère le nom du fichier actuel
-                const currentPage = window.location.pathname.split("/").pop()
+              const currentPage = window.location.pathname.replaceAll("/", "")
 
                 // Filtrer les liens
                 const filteredLinks = computed(() => {
-                    return links.value.filter(link => link.url !== currentPage)
+                    return links.value.filter(link => link.slug !== currentPage)
                 })
 
                 return { filteredLinks }

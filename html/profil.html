@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8"/>
   <title>CCP - Recherche</title>
-  <link rel="stylesheet" type="text/css" href="../css/style.css"/>
-  <link rel="icon" href="../img/logoPanda.png"/>
+  <link rel="stylesheet" type="text/css" href="static/css/style.css"/>
+  <link rel="icon" href="static/img/logoPanda.png"/>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
@@ -158,11 +158,11 @@
     setup() {
 
       const links = ref([
-        { name: "Accueil", url: "accueil.html" },
-        { name: "Recherche", url: "recherche.html" },
-        { name: "Profil", url: "profil.html"},
-        { name: "Connexion", url: "connexion.html", isLogin: true },
-        { name: "Inscription", url: "inscription.html", isLogin: true }
+        { name: "Accueil", url: "/accueil/" },
+        { name: "Recherche", url: "/recherche/" },
+        { name: "Profil", url: "/profil/"},
+        { name: "Connexion", url: "/connexion/", isLogin: true },
+        { name: "Inscription", url: "/inscription/", isLogin: true }
       ])
 
       // Récupère le nom du fichier actuel
@@ -188,7 +188,7 @@
         sex : "M.",
         mail : "tuffbaby@hotmail.com",
         xp: "1",
-        pfp: "../img/tuffBaby.jpeg"
+        pfp: "static/img/tuffBaby.jpeg"
       });
 
       return { activeTab, user };

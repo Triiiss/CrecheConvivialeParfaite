@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib.auth import logout
 from django.http import JsonResponse
 
 def connexion_view(request):
@@ -58,3 +59,7 @@ def auth_status(request):
     return JsonResponse({
         "isAuthenticated": request.user.is_authenticated
     })
+
+def logout_view(request):
+    logout(request)
+    return JsonResponse({"success": True})

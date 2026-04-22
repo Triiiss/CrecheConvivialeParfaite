@@ -74,8 +74,7 @@
         <!-- Page Niveau -->
         <div v-if="activeTab === 'exp'">
           <div class="affichageLVL">
-            <h1>Niveau [[ user.niveau ]] ⭐</h1>
-            <p>{{rank}}</p>
+            <h1>Niveau {{rank}}</h1>
             <p>[[ user.points ]] points</p>
           </div>
         </div>
@@ -86,7 +85,13 @@
             {% csrf_token %}
 
             <div class="affichageSettings">
+              {% if error %}
+                  <p style="color:rgb(255, 42, 42);">{{ error }}</p>
+              {% endif %}
 
+              {% if message %}
+                  <p style="color:rgb(44, 191, 47);">{{ message }}</p>
+              {% endif %}
               <h3>Modifier mes informations</h3>
 
               <input type="text" name="last_name" placeholder="Nouveau Nom">

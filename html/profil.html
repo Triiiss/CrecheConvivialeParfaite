@@ -1,172 +1,160 @@
 <!DOCTYPE html>
+
 <html>
-<head>
-  <meta charset="utf-8"/>
-  <title>CCP - Recherche</title>
-  <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-  <link rel="icon" href="/static/img/logoPanda.png"/>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-</head>
-<body>
-        <form style="display:none;">
-            {% csrf_token %}
-        </form>
-<div id="body">
-  <h1>La Crèche Conviviale et Parfaite</h1>
+    <head>
+        <title>CCP - Recherche</title>
+        <meta charset="utf-8"/>
+        <link rel="icon" href="/static/img/logoPanda.png"/>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+        <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    </head>
 
-  <header>
-    <!-- Bannière -->
-    <nav id="banner">
-      <a v-for="link in filteredLinks"
-         :href="link.url"
-         :key="link.name"
+    <body>
+        <form style="display:none;">{% csrf_token %}</form>
+
+        <div id="body">
+            <h1>La Crèche Conviviale et Parfaite</h1>
+
+            <header>            <!-- Bannière -->
+                <nav id="banner">
+                    <a v-for="link in filteredLinks"
+                        :href="link.url"
+                        :key="link.name"
                         @click="link.action === 'logout' ? logout($event) : null"
-         :class="{ loginLink: link.isLogin }">
-        [[ link.name ]]
-      </a>
-      <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
-      <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
-      <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
-      <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
-    </nav>
-  </header>
+                        :class="{ loginLink: link.isLogin }">
+                        [[ link.name ]]
+                    </a>
+                    <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
+                    <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
+                    <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
+                    <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
+                </nav>
+            </header>
 
-  <div id="profil">
-    <div class="layout">
+            <div id="profil">
+                <div class="layout">
 
-      <!-- menu -->
-      <div class="menu">
-        <button @click="activeTab = 'profile'">Profil</button>
-        <button @click="activeTab = 'exp'">Niveau</button>
-        <button @click="activeTab = 'settings'">Settings</button>
-      </div>
+                    <!-- menu -->
+                    <div class="menu">
+                        <button @click="activeTab = 'profile'">Profil</button>
+                        <button @click="activeTab = 'exp'">Niveau</button>
+                        <button @click="activeTab = 'settings'">Settings</button>
+                    </div>
 
-      <!-- affichage -->
-      <div class="affichage">
+                    <!-- affichage -->
+                    <div class="affichage">
 
-        <div v-if="activeTab === 'profile'">
-          <h2>Informations Personnelles</h2>
+                        <div v-if="activeTab === 'profile'">
+                            <h2>Informations Personnelles</h2>
 
-          <div class="affichagePFP">
-            <img class="pfp" :src="user.pfp" alt="photo de profil" />
-          </div>
+                            <div class="affichagePFP">
+                                <img class="pfp" :src="user.pfp" alt="photo de profil" />
+                            </div>
 
-          <!-- Infos de l'utilisateur -->
+                            <!-- Infos de l'utilisateur -->
 
-          <h3>NOM</h3>
-          <p>[[ user.name ]]</p>
+                            <h3>NOM</h3>
+                            <p>[[ user.name ]]</p>
 
-          <h3>PRENOM</h3>
-          <p>[[ user.firstname ]]</p>
+                            <h3>PRENOM</h3>
+                            <p>[[ user.firstname ]]</p>
 
-          <h3>DATE DE NAISSANCE</h3>
-          <p>[[ user.birthdate ]]</p>
+                            <h3>DATE DE NAISSANCE</h3>
+                            <p>[[ user.birthdate ]]</p>
 
-          <h3>CIVILITE</h3>
-          <p>[[ user.sex ]]</p>
+                            <h3>CIVILITE</h3>
+                            <p>[[ user.sex ]]</p>
 
-          <h3>EMAIL</h3>
-          <p> [[user.mail]]</p>
+                            <h3>EMAIL</h3>
+                            <p> [[user.mail]]</p>
 
-        </div>
+                        </div>
 
-        <!-- Page Niveau -->
-        <div v-if="activeTab === 'exp'">
+                        <!-- Page Niveau -->
+                        <div v-if="activeTab === 'exp'">
+                            <div class="affichageLVL">
+                                <h1>Niveau [[ user.niveau ]] ⭐</h1>
+                                <p>[[ user.points ]] points</p>
+                            </div>
+                        </div>
 
-          <div class="affichageLVL">
+                        <!-- Page Paramètres -->
+                        <div v-if="activeTab === 'settings'">
+                            <h2>Paramètres</h2>
 
-            <h1>Niveau [[ user.niveau ]] ⭐</h1>
-            <p>[[ user.points ]] points</p>
+                            <!-- MODIF INFOS -->
+                            <div class="affichageSettings">
 
-          </div>
+                                <h3>Modifier mes informations</h3>
 
-        </div>
+                                <input type="text" placeholder="Nouveau Nom">
+                                <input type="text" placeholder="Nouveau Prénom">
 
-        <!-- Page Paramètres -->
-        <div v-if="activeTab === 'settings'">
-          <h2>Paramètres</h2>
+                                <div class="civilite">
+                                    <h4>Civilité</h4>
 
-          <!-- MODIF INFOS -->
-          <div class="affichageSettings">
+                                    <label class="radio">
+                                    <input type="radio" name="civilite">
+                                    <span class="circle"></span>
+                                    <span>M.</span>
+                                    </label>
 
-            <h3>Modifier mes informations</h3>
+                                    <label class="radio">
+                                    <input type="radio" name="civilite">
+                                    <span class="circle"></span>
+                                    <span>Mme</span>
+                                    </label>
 
-            <input type="text" placeholder="Nouveau Nom">
-            <input type="text" placeholder="Nouveau Prénom">
+                                    <label class="radio">
+                                    <input type="radio" name="civilite">
+                                    <span class="circle"></span>
+                                    <span>Autre</span>
+                                    </label>
+                                </div>
 
-            <div class="civilite">
-              <h4>Civilité</h4>
+                                <input type="text" placeholder="Nouvelle Addresse mail">
+                                <input type="date">
 
-              <label class="radio">
-                <input type="radio" name="civilite">
-                <span class="circle"></span>
-                <span>M.</span>
-              </label>
+                                <input type="password" placeholder="Entrez votre mot de pass">
 
-              <label class="radio">
-                <input type="radio" name="civilite">
-                <span class="circle"></span>
-                <span>Mme</span>
-              </label>
+                                <button>Enregistrer</button>
+                            </div>
 
-              <label class="radio">
-                <input type="radio" name="civilite">
-                <span class="circle"></span>
-                <span>Autre</span>
-              </label>
+                            <!-- CHANGE PASSWORD -->
+                            <div class="affichageSettings">
+                                <h3>Changer le mot de passe</h3>
+
+                                <input type="password" placeholder="Ancien mot de passe">
+                                <input type="password" placeholder="Nouveau mot de passe">
+                                <input type="password" placeholder="Confirmer nouveau mot de passe">
+
+                                <button>Modifier mot de passe</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <input type="text" placeholder="Nouvelle Addresse mail">
-            <input type="date">
 
-            <input type="password" placeholder="Entrez votre mot de pass">
-
-            <button>Enregistrer</button>
-
-          </div>
-
-          <!-- CHANGE PASSWORD -->
-          <div class="affichageSettings">
-
-            <h3>Changer le mot de passe</h3>
-
-            <input type="password" placeholder="Ancien mot de passe">
-            <input type="password" placeholder="Nouveau mot de passe">
-            <input type="password" placeholder="Confirmer nouveau mot de passe">
-
-            <button>Modifier mot de passe</button>
-
-          </div>
+            <div id="footer" >
+                <span>Nous contacter :</span>
+                <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
+                <br/>
+            </div>
         </div>
 
-      </div>
+        <script>
+            const { createApp, ref, computed } = Vue
 
-    </div>
-  </div>
+            function getCSRFToken() {
+                return document.cookie
+                .split("; ")
+                .find(row => row.startsWith("csrftoken"))
+                ?.split("=")[1]
+            }
 
-
-  <div id="footer" >
-    <span>Nous contacter :</span>
-    <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
-    <br/>
-  </div>
-
-
-
-</div>
-
-<script>
-  const { createApp, ref, computed } = Vue
-
-  function getCSRFToken() {
-      return document.cookie
-          .split("; ")
-          .find(row => row.startsWith("csrftoken"))
-          ?.split("=")[1]
-  }
-
-  createApp({
-    delimiters: ['[[', ']]'],
+            createApp({
+                delimiters: ['[[', ']]'],
                 setup() {
                     const links = ref([
                         { name: "Accueil", url: "/", slug:"", auth: null},
@@ -180,28 +168,28 @@
                     const currentPage = window.location.pathname.replaceAll("/", "")
 
                     const logout = () => {
-                        fetch("/logout/", {
-                            method: "POST",
-                            credentials: "include",
-                            headers: {
-                                "X-CSRFToken": getCSRFToken()
-                            }
-                        })
-                        .then(() => {
-                            isAuthenticated.value = false
-                            window.location.href = "/"
-                        })
+                    fetch("/logout/", {
+                        method: "POST",
+                        credentials: "include",
+                        headers: {
+                            "X-CSRFToken": getCSRFToken()
+                        }
+                    })
+                    .then(() => {
+                        isAuthenticated.value = false
+                        window.location.href = "/"
+                    })
                     }
 
                     const isAuthenticated = ref(false)
 
                     fetch("/api/auth/")
-                        .then(res => res.json())
-                        .then(data => {
-                            isAuthenticated.value = data.isAuthenticated
-                        })
-                        
-                    
+                    .then(res => res.json())
+                    .then(data => {
+                        isAuthenticated.value = data.isAuthenticated
+                    })
+
+
                     const filteredLinks = computed(() => {
                         return links.value.filter(link => {
                             if (link.slug === currentPage) return false
@@ -215,27 +203,25 @@
                 }
             }).mount("#banner")
 
-  createApp({
-    delimiters: ['[[', ']]'],
-    setup() {
-      const activeTab = ref("profile");
+            createApp({
+                delimiters: ['[[', ']]'],
+                setup() {
+                    const activeTab = ref("profile");
 
-      const user = ref({
-        name: "Tuff",
-        firstname: "Baby",
-        birthdate: "20-11-2025",
-        sex : "M.",
-        mail : "tuffbaby@hotmail.com",
-        points: {{ points }},
-        niveau: {{ niveau }},
-        pfp: "/static/img/tuffBaby.jpeg"
-      });
+                    const user = ref({
+                        name: "Tuff",
+                        firstname: "Baby",
+                        birthdate: "20-11-2025",
+                        sex : "M.",
+                        mail : "tuffbaby@hotmail.com",
+                        points: { points },
+                        niveau: { niveau },
+                        pfp: "/static/img/tuffBaby.jpeg"
+                    })
 
-      return { activeTab, user };
-    }
-  }).mount("#profil");
-
-
-</script>
-</body>
+                    return { activeTab, user };
+                }
+            }).mount("#profil");
+        </script>
+    </body>
 </html>

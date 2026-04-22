@@ -1,22 +1,21 @@
 <!DOCTYPE html>
+
 <html>
     {% load static %}
     <head>
-        <meta charset="utf-8"/>
         <title>CCP - Connexion</title>
+        <meta charset="utf-8"/>
         <link rel="icon" href="/static//img/logoPanda.png"/>
         <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
+
     <body>
-        <form style="display:none;">
-            {% csrf_token %}
-        </form>
+        <form style="display:none;">{% csrf_token %}</form>
         <div id="body">
             <h1 class="titre">La Crèche Conviviale Parfaite</h1>
 
-            <header>
-            <!-- Bannière + liens -->
+            <header>            <!-- Bannière + liens -->
                 <nav id="banner">
                     <a v-for="link in filteredLinks" 
                         :href="link.url" 
@@ -41,7 +40,7 @@
 
                     <label for="username">Identifiant :</label>
                     <input type="text" name="username" required>
-                
+
                     <br>
 
                     <label for="password">Mot de passe :</label>
@@ -56,7 +55,6 @@
                 </fieldset>
             </form>
 
-
             <div id="footer" >
                 <span>Nous contacter :</span>
                 <p>Email : contact@cpp.com<br/>Téléphone : 01 23 45 67 89</p>
@@ -69,9 +67,9 @@
 
             function getCSRFToken() {
                 return document.cookie
-                    .split("; ")
-                    .find(row => row.startsWith("csrftoken"))
-                    ?.split("=")[1]
+                .split("; ")
+                .find(row => row.startsWith("csrftoken"))
+                ?.split("=")[1]
             }
 
             createApp({
@@ -105,12 +103,11 @@
                     const isAuthenticated = ref(false)
 
                     fetch("/api/auth/")
-                        .then(res => res.json())
-                        .then(data => {
-                            isAuthenticated.value = data.isAuthenticated
-                        })
-                        
-                    
+                    .then(res => res.json())
+                    .then(data => {
+                        isAuthenticated.value = data.isAuthenticated
+                    })
+
                     const filteredLinks = computed(() => {
                         return links.value.filter(link => {
                             if (link.slug === currentPage) return false
@@ -120,10 +117,10 @@
                             return true
                         })
                     })
+
                     return { filteredLinks, logout }
                 }
             }).mount("#banner")
         </script>
-        
     </body>
 </html>

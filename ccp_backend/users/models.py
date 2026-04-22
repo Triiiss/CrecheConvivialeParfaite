@@ -38,7 +38,7 @@ class Profile(models.Model):
     type = models.CharField(
         max_length=10,
         choices=TYPE_CHOICES,
-        default="x"
+        default="outsider"
     )
     birth_date = models.DateField(null=True, blank=True)
 

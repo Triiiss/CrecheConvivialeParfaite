@@ -79,8 +79,8 @@ def accueil_view(request):
     return render(request, 'accueil.html')
 
 
-def recherche_view(request):
-    return render(request, 'recherche.html')
+def information_view(request):
+    return render(request, 'information.html')
 
 
 def profil_view(request):

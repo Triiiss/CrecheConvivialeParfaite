@@ -9,7 +9,7 @@
         <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     </head>
 
-    <body> 
+    <body>
         <form style="display:none;">{% csrf_token %}</form>
 
         <div id="body">
@@ -17,8 +17,8 @@
 
             <header>            <!-- Bannière -->
                 <nav id="banner">
-                    <a v-for="link in filteredLinks" 
-                        :href="link.url" 
+                    <a v-for="link in filteredLinks"
+                        :href="link.url"
                         :key="link.name"
                         @click="link.action === 'logout' ? logout($event) : null"
                         :class="{ loginLink: link.isLogin }">
@@ -101,14 +101,14 @@
                 <div class="footer-column">
                     <h3>Navigation</h3>
                     <ul class="footer-links">
-                        <li><a href="/accueil/">Accueil</a></li>
+                        <li><a href="/">Accueil</a></li>
                         <li><a href="/recherche/">Recherche</a></li>
                         <li><a href="/connexion/">Connexion</a></li>
                         <li><a href="/inscription/">Inscription</a></li>
                     </ul>
                 </div>
             </div>
-            
+
             <div class="footer-bottom">
                 <p>copyright © 2026, Crèche Conviviale et Parfaite</p>
             </div>

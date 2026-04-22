@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>CCP - Recherche</title>
+  <title>CCP - Profil</title>
   <meta charset="utf-8"/>
   <link rel="icon" href="/static/img/logoPanda.png"/>
   <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -74,51 +74,53 @@
         <div v-if="activeTab === 'exp'">
           <div class="affichageLVL">
             <h1>Niveau [[ user.niveau ]] ⭐</h1>
+            <p>{{rank}}</p>
             <p>[[ user.points ]] points</p>
           </div>
         </div>
 
         <!-- Page Paramètres -->
         <div v-if="activeTab === 'settings'">
-          <h2>Paramètres</h2>
+        <form method="POST" action="/profil/edit/">
+          {% csrf_token %}
 
-          <!-- MODIF INFOS -->
           <div class="affichageSettings">
 
             <h3>Modifier mes informations</h3>
 
-            <input type="text" placeholder="Nouveau Nom">
-            <input type="text" placeholder="Nouveau Prénom">
+            <input type="text" name="last_name" placeholder="Nouveau Nom">
+            <input type="text" name="first_name" placeholder="Nouveau Prénom">
 
             <div class="civilite">
               <h4>Civilité</h4>
 
               <label class="radio">
-                <input type="radio" name="civilite">
+                <input type="radio" name="gender" value="mr">
                 <span class="circle"></span>
                 <span>M.</span>
               </label>
 
               <label class="radio">
-                <input type="radio" name="civilite">
+                <input type="radio" name="gender" value="mme">
                 <span class="circle"></span>
                 <span>Mme</span>
               </label>
 
               <label class="radio">
-                <input type="radio" name="civilite">
+                <input type="radio" name="gender" value="x">
                 <span class="circle"></span>
                 <span>Autre</span>
               </label>
             </div>
 
-            <input type="text" placeholder="Nouvelle Addresse mail">
-            <input type="date">
+            <input type="email" name="email" placeholder="Nouvelle adresse mail">
+            <input type="date" name="birth_date">
+            <input type="password" name="confirm" placeholder="Entrez votre mot de passe">
 
-            <input type="password" placeholder="Entrez votre mot de pass">
+            <button type="submit">Enregistrer</button>
 
-            <button>Enregistrer</button>
           </div>
+        </form>
 
           <!-- CHANGE PASSWORD -->
           <div class="affichageSettings">
@@ -154,7 +156,7 @@
     <div class="footer-column">
       <h3>Navigation</h3>
       <ul class="footer-links">
-        <li><a href="/accueil/">Accueil</a></li>
+        <li><a href="/">Accueil</a></li>
         <li><a href="/recherche/">Recherche</a></li>
         <li><a href="/connexion/">Connexion</a></li>
         <li><a href="/inscription/">Inscription</a></li>

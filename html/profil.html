@@ -159,20 +159,32 @@
     setup() {
 
       const links = ref([
-                { name: "Accueil", url: "/accueil/", slug:"accueil"},
-                { name: "Recherche", url: "/recherche/", slug:"recherche" },
-                { name: "Profil", url: "/profil/", slug:"profil"},
-                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion" },
-                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription" }
-      ])
+                { name: "Accueil", url: "/accueil/", slug:"accueil", auth: null},
+                { name: "Recherche", url: "/recherche/", slug:"recherche", auth: null },
+                { name: "Profil", url: "/profil/", slug:"profil", auth: true},
+                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
+                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false }
+                ])
 
-      // Récupère le nom du fichier actuel
-              const currentPage = window.location.pathname.replaceAll("/", "")
+                const currentPage = window.location.pathname.replaceAll("/", "")
+              
+                const isAuthenticated = ref(false)
 
-      // Filtrer les liens
-      const filteredLinks = computed(() => {
-        return links.value.filter(link => link.slug !== currentPage)
-      })
+                fetch("/api/auth/")
+                    .then(res => res.json())
+                    .then(data => {
+                        isAuthenticated.value = data.isAuthenticated
+                    })
+                // Filtrer les liens
+                const filteredLinks = computed(() => {
+                    return links.value.filter(link => {
+                    if (link.slug === currentPage) return false
+                    if (link.auth === true && !isAuthenticated.value) return false
+                    if (link.auth === false && isAuthenticated.value) return false
+
+                    return true
+                    })
+                })
 
       return { filteredLinks }
     }

@@ -39,11 +39,11 @@
                     <input type="radio" name="gender" value="mme"/><label for="mme">Madame</label></br>
                     <input type="radio" name="gender" value="x"/><label for="x">Autre</label></br><br>
 
-                        <label for="surname">Prénom : <span class="required">*</span></label>
-                        <input type="text" name="surname" minlength="2" placeholder="Emilie" required></br>
+                        <label for="first_name">Prénom : <span class="required">*</span></label>
+                        <input type="text" name="first_name" minlength="2" placeholder="Emilie" required></br>
 
-                        <label for="name" >Nom : <span class="required">*</span></label>
-                        <input type="text" name="name" minlength="2" placeholder="Dupont" required></br>
+                        <label for="last_name" >Nom : <span class="required">*</span></label>
+                        <input type="text" name="last_name" minlength="2" placeholder="Dupont" required></br>
 
                         <label for="email" >Email : <span class="required">*</span></label>
                         <input type="email" name="email" placeholder="email@gmail.com" required></br>
@@ -90,21 +90,32 @@
                 setup() {
 
                 const links = ref([
-                { name: "Accueil", url: "/accueil/", slug:"accueil"},
-                { name: "Recherche", url: "/recherche/", slug:"recherche" },
-                { name: "Profil", url: "/profil/", slug:"profil"},
-                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion" },
-                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription" }
+                { name: "Accueil", url: "/accueil/", slug:"accueil", auth: null},
+                { name: "Recherche", url: "/recherche/", slug:"recherche", auth: null },
+                { name: "Profil", url: "/profil/", slug:"profil", auth: true},
+                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
+                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false }
                 ])
 
-                // Récupère le nom du fichier actuel
-              const currentPage = window.location.pathname.replaceAll("/", "")
+                const currentPage = window.location.pathname.replaceAll("/", "")
+              
+                const isAuthenticated = ref(false)
 
+                fetch("/api/auth/")
+                    .then(res => res.json())
+                    .then(data => {
+                        isAuthenticated.value = data.isAuthenticated
+                    })
                 // Filtrer les liens
                 const filteredLinks = computed(() => {
-                    return links.value.filter(link => link.slug !== currentPage)
-                })
+                    return links.value.filter(link => {
+                    if (link.slug === currentPage) return false
+                    if (link.auth === true && !isAuthenticated.value) return false
+                    if (link.auth === false && isAuthenticated.value) return false
 
+                    return true
+                    })
+                })
                 return { filteredLinks }
                 }
             }).mount("#banner")

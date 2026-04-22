@@ -7,34 +7,52 @@ from .models import Profile
 
 
 def connexion_view(request):
+    if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
+        return redirect("accueil")
+    
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
 
         user = authenticate(request, username=username, password=password)
 
-        if user:
-            login(request, user)
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile.points += 5
-            profile.save()
-            return redirect("accueil")
+        if user is None:
+            return render(request, "connexion.html", {
+                "error": "L'identifiant ou le mot de passe est incorrect"
+            })
+        login(request, user)
+        profile, _ = Profile.objects.get_or_create(user=user)
+        profile.points += 5
+        profile.save()
+
+        return redirect("accueil")
 
     return render(request, "connexion.html")
 
 
 def inscription_view(request):
+    if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
+        return redirect("accueil")
+    
     if request.method == "POST":
         gender = request.POST.get("gender") or "x"
         last_name = request.POST.get("last_name")
         first_name = request.POST.get("first_name")
-        age = request.POST.get("age") or None
+        birth_date = request.POST.get("birth_date") or None
         username = request.POST.get("username")
         email = request.POST.get("email")
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
-        if password1 == password2 and not User.objects.filter(username=username).exists():
+        if User.objects.filter(username=username).exists():
+            return render(request, "inscription.html", {
+                "error": "Ce nom d'utilisateur est déjà pris"
+            })
+        elif password1 != password2:
+            return render(request, "inscription.html", {
+                "error": "Les mots de passe ne correspondent pas"
+            })
+        else:
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -44,14 +62,6 @@ def inscription_view(request):
             )
             Profile.objects.create(user=user, points=10)
             return redirect("connexion")
-        elif User.objects.filter(username=username).exists():
-            return render(request, "inscription.html", {
-                "error": "Ce nom d'utilisateur est déjà pris"
-            })
-        else:
-            return render(request, "inscription.html", {
-                "error": "Les mots de passe ne correspondent pas"
-            })
 
     return render(request, "inscription.html")
 
@@ -65,6 +75,8 @@ def recherche_view(request):
 
 
 def profil_view(request):
+    if not request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
+        return redirect("accueil")
     points = 0
     niveau = 0
     if request.user.is_authenticated:

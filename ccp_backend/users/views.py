@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.http import JsonResponse
 
 def connexion_view(request):
     if request.method == "POST":
@@ -11,7 +12,7 @@ def connexion_view(request):
 
         if user:
             login(request, user)
-            return redirect("accueil")  # à adapter
+            return redirect("accueil")
 
     return render(request, "connexion.html")
 
@@ -19,8 +20,8 @@ def connexion_view(request):
 def inscription_view(request):
     if request.method == "POST":
         gender = request.POST.get("gender") or "x"
-        name = request.POST.get("name")
-        surname = request.POST.get("surname")
+        last_name = request.POST.get("last_name")
+        first_name = request.POST.get("first_name")
         age = request.POST.get("age") or None
         username = request.POST.get("username")
         email = request.POST.get("email")
@@ -30,14 +31,15 @@ def inscription_view(request):
 
         if password1 == password2:
             User.objects.create_user(
-                gender=gender,
-                surname=surname,
-                name=name,
-                username=username,
+                first_name=first_name,
+                last_name=last_name,
                 email=email,
+                username=username,
                 password=password1
             )
             return redirect("connexion")
+        else:
+            render(request, "inscription.html", {"error": "Les mots de passe ne correspondent pas"})
 
     return render(request, "inscription.html")
 
@@ -50,3 +52,9 @@ def recherche_view(request):
 
 def profil_view(request):
     return render(request, 'profil.html')
+
+
+def auth_status(request):
+    return JsonResponse({
+        "isAuthenticated": request.user.is_authenticated
+    })

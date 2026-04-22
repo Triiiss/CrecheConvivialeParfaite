@@ -495,3 +495,79 @@ span.required{
   background: rgb(255, 255, 255);
   border-color: rgb(255, 255, 255);
 }
+
+.main-footer {
+    margin-top: 150px;
+    margin-left: 8%;
+    background: transparent; 
+    color: #000000c2;
+    font-family: Arial, sans-serif;
+}
+
+
+.footer-container {
+    display: flex; 
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-column {
+    flex: 1;
+    padding: 0 20px;
+}
+
+.footer-column h2, .footer-column h3 {
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #000000c2;
+    margin-left: auto;
+}
+
+
+.footer-column p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    
+}
+
+.footer-logo {
+    display: block;
+    margin-top: 15px;
+    max-width: 300px;
+    height: auto;
+}
+
+
+.footer-links {
+    list-style: none; 
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 8px;
+}
+
+.footer-links a, .footer-email {
+    color: #000000c2; 
+    transition: color 0.4s ease;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 50px;
+    padding-bottom: 20px;
+    margin-right: 140px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.575); 
+    font-size: 14px;
+    opacity: 0.8;
+}

@@ -16,8 +16,19 @@ class User(models.Model):
 
 
 class Profile(models.Model):
+    GENDER_CHOICES = [
+        ("mr", "Monsieur"),
+        ("mme", "Madame"),
+        ("x", "Autre"),
+    ]
     user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
+    gender = models.CharField(
+        max_length=10,
+        choices=GENDER_CHOICES,
+        default="x"
+    )
+    birth_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"Profil de {self.user.username}"

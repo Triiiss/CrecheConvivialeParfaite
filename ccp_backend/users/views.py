@@ -60,7 +60,7 @@ def inscription_view(request):
                 username=username,
                 password=password1
             )
-            Profile.objects.create(user=user, points=10)
+            Profile.objects.create(user=user, points=10, gender=gender,birth_date=birth_date)
             return redirect("connexion")
 
     return render(request, "inscription.html")

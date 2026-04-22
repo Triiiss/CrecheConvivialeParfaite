@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>CCP - Recherche</title>
+        <title>CCP - Profil</title>
         <meta charset="utf-8"/>
         <link rel="icon" href="/static/img/logoPanda.png"/>
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -155,7 +155,7 @@
           <h3>Navigation</h3>
           <ul class="footer-links">
               <li><a href="/">Accueil</a></li>
-              <li><a href="/recherche/">Recherche</a></li>
+              <li><a href="/information/">Information</a></li>
               <li><a href="/connexion/">Connexion</a></li>
               <li><a href="/inscription/">Inscription</a></li>
           </ul>
@@ -181,7 +181,7 @@
                 setup() {
                     const links = ref([
                         { name: "Accueil", url: "/", slug:"", auth: null},
-                        { name: "Recherche", url: "/recherche/", slug:"recherche", auth: null },
+                        { name: "Information", url: "/information/", slug:"information", auth: null },
                         { name: "Profil", url: "/profil/", slug:"profil", auth: true},
                         { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
                         { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false },

@@ -9,7 +9,7 @@ from .models import Profile
 def connexion_view(request):
     if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
-    
+
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -33,7 +33,7 @@ def connexion_view(request):
 def inscription_view(request):
     if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
-    
+
     if request.method == "POST":
         gender = request.POST.get("gender") or "x"
         last_name = request.POST.get("last_name")
@@ -92,9 +92,11 @@ def profil_view(request):
         profile, created = Profile.objects.get_or_create(user=request.user)
         points = profile.points
         niveau = points // 50
+        rank = get_rank(points)
     return render(request, 'profil.html', {
         'points': points,
         'niveau': niveau,
+        'rank' : rank
     })
 
 
@@ -107,3 +109,59 @@ def auth_status(request):
 def logout_view(request):
     logout(request)
     return JsonResponse({"success": True})
+
+def edit_profile(request):
+  if not request.user.is_authenticated:
+    return redirect("accueil")
+
+  profile = Profile.objects.get(user=request.user)
+
+  if request.method == "POST":
+    password = request.POST.get("confirm")
+
+    if not request.user.check_password(password):
+      return render(request, "profil.html", {
+        "error": "Mot de passe incorrect"
+      })
+
+    request.user.first_name = request.POST.get("first_name")
+    request.user.last_name = request.POST.get("last_name")
+    request.user.email = request.POST.get("email")
+    profile.gender = request.POST.get("gender")
+    profile.birth_date = request.POST.get("birth_date")
+
+    request.user.save()
+    profile.save()
+
+    return redirect("profil")
+
+  return redirect("profil")
+
+#Getter
+def get_user(request):
+  if not request.user.is_authenticated:
+    return JsonResponse({"error": "not authenticated"}, status=401)
+
+  profile, _ = Profile.objects.get_or_create(user=request.user)
+
+  return JsonResponse({
+    "last_name": request.user.last_name,
+    "first_name": request.user.first_name,
+    "mail": request.user.email,
+    "birthdate": profile.birth_date,
+    "gender": profile.gender,
+    "points": profile.points,
+    "niveau": profile.points // 50
+  })
+
+#Fonction qui retourne le rang de l'utilisateur
+def get_rank(points):
+  if points >= 1000:
+    return "Expert"
+  elif points >= 500:
+    return "Avancé"
+  elif points >= 100:
+    return "Intermédiaire"
+  else:
+    return "Débutant"
+

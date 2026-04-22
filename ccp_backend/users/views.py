@@ -69,7 +69,7 @@ def inscription_view(request):
                 username=username,
                 password=password1
             )
-            Profile.objects.create(user=user, points=10, gender=gender,birth_date=birth_date,type=type)
+            Profile.objects.create(user=user, points=1, gender=gender,birth_date=birth_date,type=type)
             return redirect("connexion")
 
     return render(request, "inscription.html")
@@ -86,16 +86,13 @@ def information_view(request):
 def profil_view(request):
     if not request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
-    points = 0
-    niveau = 0
-    if request.user.is_authenticated:
-        profile, created = Profile.objects.get_or_create(user=request.user)
-        points = profile.points
-        niveau = points // 50
-        rank = get_rank(points)
+    
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    points = profile.points
+    rank = get_rank(points)
+
     return render(request, 'profil.html', {
         'points': points,
-        'niveau': niveau,
         'rank' : rank
     })
 
@@ -124,16 +121,20 @@ def edit_profile(request):
         "error": "Mot de passe incorrect"
       })
 
-    request.user.first_name = request.POST.get("first_name")
-    request.user.last_name = request.POST.get("last_name")
-    request.user.email = request.POST.get("email")
-    profile.gender = request.POST.get("gender")
-    profile.birth_date = request.POST.get("birth_date")
+    request.user.first_name = request.POST.get("first_name") or request.user.first_name
+    request.user.last_name = request.POST.get("last_name") or request.user.last_name
+    request.user.email = request.POST.get("email") or request.user.email
+    profile.gender = request.POST.get("gender") or profile.gender
+    profile.birth_date = request.POST.get("birth_date") or profile.birth_date
+
+    profile.points += 2
 
     request.user.save()
     profile.save()
 
-    return redirect("profil")
+    return render(request, "profil.html", {
+        "message": "Informations modifiées avec succès"
+      })
 
   return redirect("profil")
 
@@ -152,7 +153,7 @@ def get_user(request):
     "birthdate": profile.birth_date,
     "gender": profile.gender,
     "points": profile.points,
-    "niveau": profile.points // 50
+    "rank" : get_rank(profile.points),
   })
 
 #Fonction qui retourne le rang de l'utilisateur
@@ -163,8 +164,8 @@ def get_rank(points):
     return "Avancé"
   elif points >= 100:
     return "Intermédiaire"
-  else:
-    return "Débutant"
+  return "Débutant"
+
 
 #Fonction qui renvoie la liste des utilisateurs au format JSON
 def api_all_users(request):
@@ -185,3 +186,13 @@ def api_all_users(request):
         })
     
     return JsonResponse(data, safe=False)
+
+def consult_profile(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "not authenticated"}, status=401)
+
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    profile.points += 5
+
+    profile.save()

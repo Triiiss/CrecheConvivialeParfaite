@@ -52,8 +52,8 @@
                     <label for="email" >Email : <span class="required">*</span></label>
                     <input type="email" name="email" placeholder="email@gmail.com" required></br>
 
-                    <label for="age">Date de naissance :</label>
-                    <input type="date" name="age"/></br>
+                    <label for="birth_date">Date de naissance :</label>
+                    <input type="date" name="birth_date"/></br>
 
                     <label for="type">Quel type de membre ? <span class="required">*</span> </label>
                     <select name="type">
@@ -73,45 +73,48 @@
 
                     <label for="password2" >Confirmation mot de passe : <span class="required">*</span></label>
                     <input type="password" name="password2" placeholder="********" required></br>
+                    {% if error %}
+                        <p style="color:red;">{{ error }}</p>
+                    {% endif %}
 
                     <button type="submit" class="inscription" name="submit">S'inscrire</button>
                     <p>Déjà inscrit ? <a href="/connexion/">Connectez vous</a></p>
                 </fieldset>
             </form>
 
+            <footer class="main-footer" style="margin-top: 600px;">
+                <div class="footer-container">
+                    <div class="footer-column">
+                        <h2>Crèche Conviviale et Parfaite</h2>
+                        <p>Laissez vos enfant chez nous ^^.</p>
+                        <img src="/static/img/logo.png" alt="Logo" class="footer-logo">
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Ou nous trouver</h3>
+                        <p>Av. du Parc, 95000 Cergy</p>
+                        <p>2 Av. Adolphe Chauvin, 95300 Pontoise</p>
+                        <p>01 23 45 67 89</p>
+                        <p><a href="mailto:exemple@mail.com" class="footer-email">ccp@mail.com</a></p>
+                    </div>
+
+                    <div class="footer-column">
+                        <h3>Navigation</h3>
+                        <ul class="footer-links">
+                            <li><a href="/accueil/">Accueil</a></li>
+                            <li><a href="/recherche/">Recherche</a></li>
+                            <li><a href="/connexion/">Connexion</a></li>
+                            <li><a href="/inscription/">Inscription</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>copyright © 2026, Crèche Conviviale et Parfaite</p>
+                </div>
+            </footer>
         </div>
 
-        <footer class="main-footer">
-            <div class="footer-container">
-                <div class="footer-column">
-                    <h2>Crèche Conviviale et Parfaite</h2>
-                    <p>Laissez vos enfant chez nous ^^.</p>
-                    <img src="/static/img/logo.png" alt="Logo" class="footer-logo">
-                </div>
-
-                <div class="footer-column">
-                    <h3>Ou nous trouver</h3>
-                    <p>Av. du Parc, 95000 Cergy</p>
-                    <p>2 Av. Adolphe Chauvin, 95300 Pontoise</p>
-                    <p>01 23 45 67 89</p>
-                    <p><a href="mailto:exemple@mail.com" class="footer-email">ccp@mail.com</a></p>
-                </div>
-
-                <div class="footer-column">
-                    <h3>Navigation</h3>
-                    <ul class="footer-links">
-                        <li><a href="/accueil/">Accueil</a></li>
-                        <li><a href="/recherche/">Recherche</a></li>
-                        <li><a href="/connexion/">Connexion</a></li>
-                        <li><a href="/inscription/">Inscription</a></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="footer-bottom">
-                <p>copyright © 2026, Crèche Conviviale et Parfaite</p>
-            </div>
-        </footer>
         <script>
             const { createApp, ref, computed } = Vue
 
@@ -134,7 +137,7 @@
                         { name: "Déconnexion", action: "logout", isLogin: true,auth: true }
                     ])
 
-                    const currentPage = window.location.pathname.replaceAll("/", "")
+                    const currentPbirth_date = window.location.pathname.replaceAll("/", "")
 
                     const logout = () => {
                         fetch("/logout/", {
@@ -161,7 +164,7 @@
 
                     const filteredLinks = computed(() => {
                         return links.value.filter(link => {
-                            if (link.slug === currentPage) return false
+                            if (link.slug === currentPbirth_date) return false
                             if (link.auth === true && !isAuthenticated.value) return false
                             if (link.auth === false && isAuthenticated.value) return false
 

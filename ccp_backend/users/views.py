@@ -3,6 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from .models import Profile
+
 
 def connexion_view(request):
     if request.method == "POST":
@@ -13,6 +15,9 @@ def connexion_view(request):
 
         if user:
             login(request, user)
+            profile, created = Profile.objects.get_or_create(user=user)
+            profile.points += 5
+            profile.save()
             return redirect("accueil")
 
     return render(request, "connexion.html")
@@ -29,15 +34,15 @@ def inscription_view(request):
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
-
         if password1 == password2:
-            User.objects.create_user(
+            user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
                 email=email,
                 username=username,
                 password=password1
             )
+            Profile.objects.create(user=user, points=10)
             return redirect("connexion")
         else:
             render(request, "inscription.html", {"error": "Les mots de passe ne correspondent pas"})
@@ -48,17 +53,29 @@ def inscription_view(request):
 def accueil_view(request):
     return render(request, 'accueil.html')
 
+
 def recherche_view(request):
     return render(request, 'recherche.html')
 
+
 def profil_view(request):
-    return render(request, 'profil.html')
+    points = 0
+    niveau = 0
+    if request.user.is_authenticated:
+        profile, created = Profile.objects.get_or_create(user=request.user)
+        points = profile.points
+        niveau = points // 50
+    return render(request, 'profil.html', {
+        'points': points,
+        'niveau': niveau,
+    })
 
 
 def auth_status(request):
     return JsonResponse({
         "isAuthenticated": request.user.is_authenticated
     })
+
 
 def logout_view(request):
     logout(request)

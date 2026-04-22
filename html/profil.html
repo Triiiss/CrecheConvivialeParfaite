@@ -75,8 +75,8 @@
 
           <div class="affichageLVL">
 
-            <h1>Niveau</h1>
-            <p>[[user.xp]]</p>
+            <h1>Niveau [[ user.niveau ]] ⭐</h1>
+            <p>[[ user.points ]] points</p>
 
           </div>
 
@@ -226,7 +226,8 @@
         birthdate: "20-11-2025",
         sex : "M.",
         mail : "tuffbaby@hotmail.com",
-        xp: "1",
+        points: {{ points }},
+        niveau: {{ niveau }},
         pfp: "/static/img/tuffBaby.jpeg"
       });
 

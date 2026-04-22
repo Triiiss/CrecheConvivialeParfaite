@@ -34,7 +34,7 @@ def inscription_view(request):
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
-        if password1 == password2:
+        if password1 == password2 and not User.objects.filter(username=username).exists():
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -44,8 +44,14 @@ def inscription_view(request):
             )
             Profile.objects.create(user=user, points=10)
             return redirect("connexion")
+        elif User.objects.filter(username=username).exists():
+            return render(request, "inscription.html", {
+                "error": "Ce nom d'utilisateur est déjà pris"
+            })
         else:
-            render(request, "inscription.html", {"error": "Les mots de passe ne correspondent pas"})
+            return render(request, "inscription.html", {
+                "error": "Les mots de passe ne correspondent pas"
+            })
 
     return render(request, "inscription.html")
 

@@ -41,6 +41,7 @@ def inscription_view(request):
         birth_date = request.POST.get("birth_date") or None
         username = request.POST.get("username")
         email = request.POST.get("email")
+        type = request.POST.get("type")
         password1 = request.POST.get("password1")
         password2 = request.POST.get("password2")
 
@@ -48,9 +49,17 @@ def inscription_view(request):
             return render(request, "inscription.html", {
                 "error": "Ce nom d'utilisateur est déjà pris"
             })
+        elif User.objects.filter(email=email).exists():
+            return render(request, "inscription.html", {
+                "error": "Cet email est déjà pris"
+            })
         elif password1 != password2:
             return render(request, "inscription.html", {
                 "error": "Les mots de passe ne correspondent pas"
+            })
+        elif type == "outsider":
+            return render(request, "inscription.html", {
+                "error": "La crèche n'accepte pas de personnes extérieures"
             })
         else:
             user = User.objects.create_user(
@@ -60,7 +69,7 @@ def inscription_view(request):
                 username=username,
                 password=password1
             )
-            Profile.objects.create(user=user, points=10, gender=gender,birth_date=birth_date)
+            Profile.objects.create(user=user, points=10, gender=gender,birth_date=birth_date,type=type)
             return redirect("connexion")
 
     return render(request, "inscription.html")

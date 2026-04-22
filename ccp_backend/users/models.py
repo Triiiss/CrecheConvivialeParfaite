@@ -21,11 +21,23 @@ class Profile(models.Model):
         ("mme", "Madame"),
         ("x", "Autre"),
     ]
+    TYPE_CHOICES = [
+        ("outsider", "Exterieur"),
+        ("enfant", "Enfant"),
+        ("parent", "Parent"),
+        ("encadrant", "Encadrant"),
+        ("directeur", "Directeur"),
+    ]
     user = models.OneToOneField(AuthUser, on_delete=models.CASCADE)
     points = models.IntegerField(default=0)
     gender = models.CharField(
         max_length=10,
         choices=GENDER_CHOICES,
+        default="x"
+    )
+    type = models.CharField(
+        max_length=10,
+        choices=TYPE_CHOICES,
         default="x"
     )
     birth_date = models.DateField(null=True, blank=True)

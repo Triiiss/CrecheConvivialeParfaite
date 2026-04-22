@@ -8,6 +8,9 @@
         <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     </head>
     <body> 
+        <form style="display:none;">
+            {% csrf_token %}
+        </form>
         <div id="body">
             <h1>La Crèche Conviviale et Parfaite</h1>
             
@@ -17,6 +20,7 @@
                     <a v-for="link in filteredLinks" 
                         :href="link.url" 
                         :key="link.name"
+                        @click="link.action === 'logout' ? logout($event) : null"
                         :class="{ loginLink: link.isLogin }">
                         [[ link.name ]]
                     </a>
@@ -87,6 +91,13 @@
 
         <script>
             const { createApp, ref, computed } = Vue
+
+            function getCSRFToken() {
+                return document.cookie
+                    .split("; ")
+                    .find(row => row.startsWith("csrftoken"))
+                    ?.split("=")[1]
+            }
 
             createApp({
             delimiters: ['[[', ']]'],
@@ -256,36 +267,50 @@
             createApp({
                 delimiters: ['[[', ']]'],
                 setup() {
+                    const links = ref([
+                        { name: "Accueil", url: "/", slug:"", auth: null},
+                        { name: "Recherche", url: "/recherche/", slug:"recherche", auth: null },
+                        { name: "Profil", url: "/profil/", slug:"profil", auth: true},
+                        { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
+                        { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false },
+                        { name: "Déconnexion", action: "logout", isLogin: true,auth: true }
+                    ])
 
-                const links = ref([
-                { name: "Accueil", url: "/accueil/", slug:"accueil", auth: null},
-                { name: "Recherche", url: "/recherche/", slug:"recherche", auth: null },
-                { name: "Profil", url: "/profil/", slug:"profil", auth: true},
-                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
-                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false }
-                ])
+                    const currentPage = window.location.pathname.replaceAll("/", "")
 
-                const currentPage = window.location.pathname.replaceAll("/", "")
-              
-                const isAuthenticated = ref(false)
+                    const logout = () => {
+                        fetch("/logout/", {
+                            method: "POST",
+                            credentials: "include",
+                            headers: {
+                                "X-CSRFToken": getCSRFToken()
+                            }
+                        })
+                        .then(() => {
+                            isAuthenticated.value = false
+                            window.location.href = "/"
+                        })
+                    }
 
-                fetch("/api/auth/")
-                    .then(res => res.json())
-                    .then(data => {
-                        isAuthenticated.value = data.isAuthenticated
+                    const isAuthenticated = ref(false)
+
+                    fetch("/api/auth/")
+                        .then(res => res.json())
+                        .then(data => {
+                            isAuthenticated.value = data.isAuthenticated
+                        })
+                        
+                    
+                    const filteredLinks = computed(() => {
+                        return links.value.filter(link => {
+                            if (link.slug === currentPage) return false
+                            if (link.auth === true && !isAuthenticated.value) return false
+                            if (link.auth === false && isAuthenticated.value) return false
+
+                            return true
+                        })
                     })
-                // Filtrer les liens
-                const filteredLinks = computed(() => {
-                    return links.value.filter(link => {
-                    if (link.slug === currentPage) return false
-                    if (link.auth === true && !isAuthenticated.value) return false
-                    if (link.auth === false && isAuthenticated.value) return false
-
-                    return true
-                    })
-                })
-
-                return { filteredLinks }
+                    return { filteredLinks, logout }
                 }
             }).mount("#banner")
         </script>

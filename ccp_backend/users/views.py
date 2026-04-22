@@ -9,7 +9,7 @@ from .models import Profile
 def connexion_view(request):
     if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
-
+    
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -33,7 +33,7 @@ def connexion_view(request):
 def inscription_view(request):
     if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
-
+    
     if request.method == "POST":
         gender = request.POST.get("gender") or "x"
         last_name = request.POST.get("last_name")
@@ -107,20 +107,3 @@ def auth_status(request):
 def logout_view(request):
     logout(request)
     return JsonResponse({"success": True})
-
-#Getter
-def get_user(request):
-  if not request.user.is_authenticated:
-    return JsonResponse({"error": "not authenticated"}, status=401)
-
-  profile, _ = Profile.objects.get_or_create(user=request.user)
-
-  return JsonResponse({
-    "last_name": request.user.last_name,
-    "first_name": request.user.first_name,
-    "mail": request.user.email,
-    "birthdate": profile.birth_date,
-    "gender": profile.gender,
-    "points": profile.points,
-    "niveau": profile.points // 50
-  })

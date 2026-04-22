@@ -11,5 +11,4 @@ urlpatterns = [
     path("profil/", views.profil_view, name="profil"),
     path("api/auth/", views.auth_status, name="auth_status"),
     path("logout/", views.logout_view, name="logout"),
-    path("api/user/", views.get_user),
 ]

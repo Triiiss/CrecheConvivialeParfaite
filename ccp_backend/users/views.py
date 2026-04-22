@@ -145,6 +145,7 @@ def get_user(request):
   profile, _ = Profile.objects.get_or_create(user=request.user)
 
   return JsonResponse({
+    "username": request.user.username,
     "last_name": request.user.last_name,
     "first_name": request.user.first_name,
     "mail": request.user.email,
@@ -165,3 +166,22 @@ def get_rank(points):
   else:
     return "Débutant"
 
+#Fonction qui renvoie la liste des utilisateurs au format JSON
+def api_all_users(request):
+
+    profiles = Profile.objects.select_related('user').all() #select_related agit comme une jointure 
+    #pour que django ne refasse pas 10 requetes pour les user
+    
+    data = []
+    for p in profiles:
+        data.append({
+            "username": p.user.username,
+            "last_name": p.user.last_name,
+            "first_name": p.user.first_name,
+            "mail": p.user.email,             
+            "role": p.type,                   
+            "birthdate": str(p.birth_date),   
+            "pfp": "/static/img/anonymous.png" 
+        })
+    
+    return JsonResponse(data, safe=False)

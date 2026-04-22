@@ -571,3 +571,72 @@ span.required{
     font-size: 14px;
     opacity: 0.8;
 }
+
+
+.affichageSocial{
+  padding: 25px;
+  background: transparent;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 660px;
+  text-align: center;
+  margin-left: 280px;
+
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  border: 2px solid #333;
+  border-radius: 50px; /* Forme de pilule comme sur le dessin */
+  padding: 10px 30px;
+  background-color: white;
+  justify-content: space-between;
+}
+
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-left: 5%;
+}
+
+.social-pfp {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 1px solid #000000;
+  object-fit: cover;
+}
+
+.user-main-info {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.pseudo {
+  color: #000000;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.user-type {
+  color: #000000;
+  font-style: italic;
+}
+
+.card-right {
+  text-align: left;
+  min-width: 200px;
+  color: #000000;
+  font-size: 110%;
+}
+
+.card-right p {
+  margin: 2px 0;
+  font-size: 0.9em;
+  color: #000000;
+}

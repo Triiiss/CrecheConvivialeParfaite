@@ -39,6 +39,7 @@
         <button @click="activeTab = 'profile'">Profil</button>
         <button @click="activeTab = 'exp'">Niveau</button>
         <button @click="activeTab = 'settings'">Settings</button>
+        <button @click="activeTab = 'social'">Social</button>
       </div>
 
       <!-- affichage -->
@@ -81,46 +82,46 @@
 
         <!-- Page Paramètres -->
         <div v-if="activeTab === 'settings'">
-        <form method="POST" action="/profil/edit/">
-          {% csrf_token %}
+          <form method="POST" action="/profil/edit/">
+            {% csrf_token %}
 
-          <div class="affichageSettings">
+            <div class="affichageSettings">
 
-            <h3>Modifier mes informations</h3>
+              <h3>Modifier mes informations</h3>
 
-            <input type="text" name="last_name" placeholder="Nouveau Nom">
-            <input type="text" name="first_name" placeholder="Nouveau Prénom">
+              <input type="text" name="last_name" placeholder="Nouveau Nom">
+              <input type="text" name="first_name" placeholder="Nouveau Prénom">
 
-            <div class="civilite">
-              <h4>Civilité</h4>
+              <div class="civilite">
+                <h4>Civilité</h4>
 
-              <label class="radio">
-                <input type="radio" name="gender" value="mr">
-                <span class="circle"></span>
-                <span>M.</span>
-              </label>
+                <label class="radio">
+                  <input type="radio" name="gender" value="mr">
+                  <span class="circle"></span>
+                  <span>M.</span>
+                </label>
 
-              <label class="radio">
-                <input type="radio" name="gender" value="mme">
-                <span class="circle"></span>
-                <span>Mme</span>
-              </label>
+                <label class="radio">
+                  <input type="radio" name="gender" value="mme">
+                  <span class="circle"></span>
+                  <span>Mme</span>
+                </label>
 
-              <label class="radio">
-                <input type="radio" name="gender" value="x">
-                <span class="circle"></span>
-                <span>Autre</span>
-              </label>
+                <label class="radio">
+                  <input type="radio" name="gender" value="x">
+                  <span class="circle"></span>
+                  <span>Autre</span>
+                </label>
+              </div>
+
+              <input type="email" name="email" placeholder="Nouvelle adresse mail">
+              <input type="date" name="birth_date">
+              <input type="password" name="confirm" placeholder="Entrez votre mot de passe">
+
+              <button type="submit">Enregistrer</button>
+
             </div>
-
-            <input type="email" name="email" placeholder="Nouvelle adresse mail">
-            <input type="date" name="birth_date">
-            <input type="password" name="confirm" placeholder="Entrez votre mot de passe">
-
-            <button type="submit">Enregistrer</button>
-
-          </div>
-        </form>
+          </form>
 
           <!-- CHANGE PASSWORD -->
           <div class="affichageSettings">
@@ -133,7 +134,27 @@
             <button>Modifier mot de passe</button>
           </div>
         </div>
-      </div>
+        <div v-if="activeTab === 'social'"> 
+            <h2>Autres utilisateurs</h2>
+            <div class="affichageSocial">
+              <div v-for="u in filteredSocialUsers" :key="u.id" class="user-card">
+              
+                <div class="card-left">
+                  <img :src="u.pfp || '/static/img/anonymous.png'" class="social-pfp" />
+                  <div class="user-main-info">
+                    <span class="pseudo">[[ u.username ]]</span>
+                    <span class="user-type">[[ u.role ]]</span>
+                  </div>
+                </div>
+
+              <div class="card-right">
+                <p><strong>Nom :</strong> [[ u.last_name ]]</p>
+                <p><strong>Prénom :</strong> [[ u.first_name ]]</p>
+                <p><strong>Né(e) le :</strong> [[ u.birthdate ]]</p>
+              </div>
+
+            </div>
+        </div>
     </div>
   </div>
 </div>
@@ -229,23 +250,39 @@
   }).mount("#banner")
 
   createApp({
-    delimiters: ['[[', ']]'],
-    setup() {
-      const activeTab = ref("profile");
+  delimiters: ['[[', ']]'],
+  setup() {
+    const activeTab = ref("profile"); // ref(...) variable réactive permet par exemple de changer l'affichage sans recharger la page
+    const user = ref(null);
+    const allUsers = ref([]);
 
-      const user = ref(null)
-      user.pfp = "/static/img/anonymous.png"
-      fetch("/api/user/", {
-        credentials: "include"
-      })
-        .then(res => res.json())
-        .then(data => {
-          user.value = data
-        })
+    // Récuperation du profil connecter
+    fetch("/api/user/", { credentials: "include" })
+      .then(res => res.json())
+      .then(data => {
+        user.value = data;
+      });
 
-      return { activeTab, user };
-    }
-  }).mount("#profil");
+    // Récupération de tous les profils
+    fetch("/api/all_users/")
+      .then(res => res.json())
+      .then(data => {
+        allUsers.value = data;
+      });
+
+
+    const filteredSocialUsers = computed(() => {
+      
+      if (!user.value || !allUsers.value) return []; // si pas de valeur chargé -> liste vide
+      
+      
+      return allUsers.value.filter(u => u.username !== user.value.username);
+    });
+
+    
+    return { activeTab, user, allUsers, filteredSocialUsers };
+  }
+}).mount("#profil");
 </script>
 </body>
 </html>

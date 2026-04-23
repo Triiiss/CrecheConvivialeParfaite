@@ -74,7 +74,7 @@
         <!-- Page Niveau -->
         <div v-if="activeTab === 'exp'">
           <div class="affichageLVL">
-            <h1>Niveau {{rank}}</h1>
+            <h1>Niveau [[ userRank ]]</h1>
             <p>[[ user.points ]] points</p>
           </div>
         </div>
@@ -152,16 +152,24 @@
                   </div>
                 </div>
 
-              <div class="card-right">
-                <p><strong>Nom :</strong> [[ u.last_name ]]</p>
-                <p><strong>Prénom :</strong> [[ u.first_name ]]</p>
-                <p><strong>Né(e) le :</strong> [[ u.birthdate ]]</p>
-              </div>
+                <div class="card-right">
+                  <p><strong>Nom :</strong> [[ u.last_name ]]</p>
+                  <p><strong>Prénom :</strong> [[ u.first_name ]]</p>
+                  
+                  <button @click="revealInfo(u)" class="btn-more">
+                    [[ u.showMore ? 'Cacher' : 'Voir plus' ]]
+                  </button>
 
+                  <div v-if="u.showMore" class="extra-info">
+                    <p><strong>Genre :</strong> [[ u.gender ]]</p>
+                    <p><strong>Né(e) le :</strong> [[ u.birthdate ]]</p>
+                  </div>
+
+                </div>
+              </div>
             </div>
         </div>
-    </div>
-  </div>
+      </div>
 </div>
 <footer class="main-footer">
   <div class="footer-container">
@@ -261,6 +269,38 @@
     const user = ref(null);
     const allUsers = ref([]);
 
+
+    const revealInfo = (u) => {
+      
+      u.showMore = !u.showMore;
+
+      
+      if (u.showMore) {
+        fetch("/api/consult_profile/", { 
+          method: "POST",
+          headers: {
+            "X-CSRFToken": getCSRFToken()
+          }
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log("Points ajoutés !");
+          user.value.points += 10; 
+        });
+      }
+    };
+
+    const userRank = computed(() => {
+      if (!user.value) return "Débutant";
+      const pts = user.value.points;
+      if (pts >= 1000) return "Expert";
+      if (pts >= 500) return "Avancé";
+      if (pts >= 100) return "Intermédiaire";
+      return "Débutant";
+    });
+
+
+
     // Récuperation du profil connecter
     fetch("/api/user/", { credentials: "include" })
       .then(res => res.json())
@@ -272,7 +312,7 @@
     fetch("/api/all_users/")
       .then(res => res.json())
       .then(data => {
-        allUsers.value = data;
+      allUsers.value = data.map(u => ({ ...u, showMore: false }));
       });
 
 
@@ -285,8 +325,11 @@
     });
 
     
-    return { activeTab, user, allUsers, filteredSocialUsers };
+    return { activeTab, user, allUsers, filteredSocialUsers, revealInfo, userRank };
   }
+
+
+
 }).mount("#profil");
 </script>
 </body>

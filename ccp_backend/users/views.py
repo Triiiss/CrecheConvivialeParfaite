@@ -180,7 +180,8 @@ def api_all_users(request):
             "last_name": p.user.last_name,
             "first_name": p.user.first_name,
             "mail": p.user.email,             
-            "role": p.type,                   
+            "role": p.type, 
+            "gender": p.gender,                  
             "birthdate": str(p.birth_date),   
             "pfp": "/static/img/anonymous.png" 
         })
@@ -193,6 +194,8 @@ def consult_profile(request):
 
     profile, _ = Profile.objects.get_or_create(user=request.user)
 
-    profile.points += 5
+    profile.points += 10
 
     profile.save()
+
+    return JsonResponse({"success": True, "new_points": profile.points})

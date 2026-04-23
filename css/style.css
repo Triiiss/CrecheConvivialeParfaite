@@ -640,3 +640,27 @@ span.required{
   font-size: 0.9em;
   color: #000000;
 }
+
+
+
+.btn-more {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    padding: 5px 15px;
+    cursor: pointer;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+
+.extra-info {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed #ccc;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

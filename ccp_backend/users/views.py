@@ -97,6 +97,10 @@ def profil_view(request):
     })
 
 
+def objets_view(request):
+    return render(request, 'recherche_objets.html')
+
+
 def auth_status(request):
     return JsonResponse({
         "isAuthenticated": request.user.is_authenticated

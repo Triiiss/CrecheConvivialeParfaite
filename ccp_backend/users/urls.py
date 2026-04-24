@@ -19,6 +19,7 @@ urlpatterns = [
     path("profil/change-password/", views.change_password),
     path('api/all_users/', views.api_all_users, name='api_all_users'),
     path('api/consult_profile/', views.consult_profile, name='api_consult_profile'),
+    path('api/consult_object/', views.consult_object, name='api_consult_object'),
 
     path("information/", views.information_view, name="information"),
     path("objets/", views.objets_view, name="objets"),

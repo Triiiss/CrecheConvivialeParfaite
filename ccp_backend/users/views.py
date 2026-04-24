@@ -298,3 +298,16 @@ def consult_profile(request):
     profile.save()
 
     return JsonResponse({"success": True, "new_points": profile.points})
+
+
+def consult_object(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"error": "not authenticated"}, status=401)
+
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+
+    profile.points += 5
+
+    profile.save()
+
+    return JsonResponse({"success": True, "new_points": profile.points})

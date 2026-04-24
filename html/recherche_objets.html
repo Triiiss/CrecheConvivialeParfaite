@@ -66,7 +66,7 @@
                             </span>
                         </p>
 
-                        <button @click="item.showMore = !item.showMore" class="btn-more">
+                        <button @click="toggleAndReward(item)" class="btn-more">
                             [[ item.showMore ? 'Réduire' : 'En savoir plus' ]]
                         </button>
 
@@ -124,50 +124,63 @@
             createApp({
                 delimiters: ['[[', ']]'],
                 setup() {
-                    const searchText = ref("")
-                    const place = ref("")
-                    const category = ref("")
-                    const statusFilter = ref("")
-                    const targetFilter = ref("")
+                const searchText = ref("")
+                const place = ref("")
+                const category = ref("")
+                const statusFilter = ref("")
+                const targetFilter = ref("")
 
-                    const items = ref([ // objet hard coder pour le moment
-                        { name: "Chauffeur de biberon connecté", place: "cuisine", target: "encadrant", category: "alimentation", status: "eteint"},
-                        { name: "Boîte de jouets connectés", place: "salle-principale", target: "enfant", category: "divertissement", status: "allume" },
-                        { name: "Projecteur pour la sieste", place: "dortoir", target: "enfant", category: "confort", status: "veille"},
-                        { name: "Haut-parleur connecté", place: "dortoir", target: "encadrant", category: "divertissement", status: "allume" },
-                        { name: "Radiateur connecté", place: "toutes-ailes", target: "encadrant", category: "confort", status: "allume" }
-                    ].map(i => ({ ...i, showMore: false })));
+                const items = ref([
+                    { name: "Chauffeur de biberon connecté", place: "cuisine", target: "encadrant", category: "alimentation", status: "eteint"},
+                    { name: "Boîte de jouets connectés", place: "salle-principale", target: "enfant", category: "divertissement", status: "allume" },
+                    { name: "Projecteur pour la sieste", place: "dortoir", target: "enfant", category: "confort", status: "veille"},
+                    { name: "Haut-parleur connecté", place: "dortoir", target: "encadrant", category: "divertissement", status: "allume" },
+                    { name: "Radiateur connecté", place: "toutes-ailes", target: "encadrant", category: "confort", status: "allume" }
+                ].map(i => ({ ...i, showMore: false })));
 
-                    const getStatusClass = (status) => {
-                        if (status === 'allume') return 'status-green';
-                        if (status === 'eteint') return 'status-red';
-                        if (status === 'veille') return 'status-yellow';
-                        return '';
-                    };
+                const toggleAndReward = (item) => {
+                    item.showMore = !item.showMore;
 
-                    const filteredItems = computed(() => {
-                        return items.value.filter(item => {
-                            // Logique de recherche textuelle
-                            const matchName = item.name.toLowerCase().includes(searchText.value.toLowerCase());
-                            
-                            // Logique des filtres sélectifs
-                            const matchPlace = place.value === "" || item.place === place.value;
-                            const matchCategory = category.value === "" || item.category === category.value;
-                            
-                            // NOUVEAUX FILTRES
-                            const matchStatus = statusFilter.value === "" || item.status === statusFilter.value;
-                            const matchTarget = targetFilter.value === "" || item.target === targetFilter.value;
+                    if (item.showMore) {
+                        fetch("/api/consult_object/", { 
+                            method: "POST",
+                            headers: {
+                                "X-CSRFToken": getCSRFToken()
+                            }
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            console.log("5 points ajoutés pour la consultation de l'objet !");
+                        })
+                        .catch(err => console.error("Erreur points:", err));
+                    }
+                };
 
-                            return matchName && matchPlace && matchCategory && matchStatus && matchTarget;
-                        });
+                const getStatusClass = (status) => {
+                    if (status === 'allume') return 'status-green';
+                    if (status === 'eteint') return 'status-red';
+                    if (status === 'veille') return 'status-yellow';
+                    return '';
+                };
+
+                const filteredItems = computed(() => {
+                    return items.value.filter(item => {
+                        const matchName = item.name.toLowerCase().includes(searchText.value.toLowerCase());
+                        const matchPlace = place.value === "" || item.place === place.value;
+                        const matchCategory = category.value === "" || item.category === category.value;
+                        const matchStatus = statusFilter.value === "" || item.status === statusFilter.value;
+                        const matchTarget = targetFilter.value === "" || item.target === targetFilter.value;
+                        return matchName && matchPlace && matchCategory && matchStatus && matchTarget;
                     });
+                });
 
-                    return {
-                        searchText, place, category, 
-                        statusFilter, targetFilter, // Ne pas oublier de les retourner
-                        filteredItems, getStatusClass
-                    };
-                }
+                return {
+                    searchText, place, category, 
+                    statusFilter, targetFilter,
+                    filteredItems, getStatusClass,
+                    toggleAndReward
+                };
+            }
             }).mount("#search")
          
 
@@ -219,7 +232,7 @@
             return true
             })
             })
-            return { filteredLinks, logout }
+            return { filteredLinks, logout}
             }
             }).mount("#banner")
 

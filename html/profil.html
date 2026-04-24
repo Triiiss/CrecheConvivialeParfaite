@@ -54,6 +54,9 @@
 
           <!-- Infos de l'utilisateur -->
 
+          <h3>PSEUDO</h3>
+          <p>[[ user.username ]]</p>
+
           <h3>NOM</h3>
           <p>[[ user.last_name ]]</p>
 
@@ -65,6 +68,9 @@
 
           <h3>CIVILITE</h3>
           <p>[[ user.gender ]]</p>
+
+          <h3>TYPE</h3>
+          <p>[[ user.type ]]</p>
 
           <h3>EMAIL</h3>
           <p> [[user.mail]]</p>
@@ -85,13 +91,7 @@
             {% csrf_token %}
 
             <div class="affichageSettings">
-              {% if error %}
-                  <p style="color:rgb(255, 42, 42);">{{ error }}</p>
-              {% endif %}
 
-              {% if message %}
-                  <p style="color:rgb(44, 191, 47);">{{ message }}</p>
-              {% endif %}
               <h3>Modifier mes informations</h3>
 
               <input type="text" name="last_name" placeholder="Nouveau Nom">
@@ -121,7 +121,15 @@
 
               <input type="email" name="email" placeholder="Nouvelle adresse mail">
               <input type="date" name="birth_date">
-              <input type="password" name="confirm" placeholder="Entrez votre mot de passe">
+
+              <div class="confirm_password_profile">
+                <h4>Confirmer le changement en entrant votre mot de passe</h4>
+                <input type="password" name="confirm" placeholder="Entrez votre mot de passe">
+                {% if error %}
+                <p>{{ error }}</p>
+                {% endif %}
+              </div>
+
 
               <button type="submit">Enregistrer</button>
 
@@ -132,18 +140,41 @@
           <div class="affichageSettings">
             <h3>Changer le mot de passe</h3>
 
-            <input type="password" placeholder="Ancien mot de passe">
-            <input type="password" placeholder="Nouveau mot de passe">
-            <input type="password" placeholder="Confirmer nouveau mot de passe">
+            <form method="POST" action="/profil/change-password/">
+              {% csrf_token %}
 
-            <button>Modifier mot de passe</button>
+              <input type="password" name="new_password" placeholder="Nouveau mot de passe">
+              <input type="password" name="confirm_password" placeholder="Confirmer nouveau mot de passe">
+              <div class="confirm_password_profile">
+                <h4>Confirmer le changement en entrant votre mot de passe</h4>
+                <input type="password" name="old_password" placeholder="Ancien mot de passe">
+                {% if ps_error %}
+                <p>{{ ps_error }}</p>
+                {% endif %}
+              </div>
+
+
+              {% if password_error %}
+              <p class="error-msg">{{ password_error }}</p>
+              {% endif %}
+
+              {% if password_message %}
+              <p class="success-msg">{{ password_message }}</p>
+              {% endif %}
+
+              <button type="submit">Modifier mot de passe</button>
+            </form>
           </div>
+
         </div>
-        <div v-if="activeTab === 'social'"> 
+
+        <!-- SOCIAL -->
+
+        <div v-if="activeTab === 'social'">
             <h2>Autres utilisateurs</h2>
             <div class="affichageSocial">
               <div v-for="u in filteredSocialUsers" :key="u.id" class="user-card">
-              
+
                 <div class="card-left">
                   <img :src="u.pfp || '/static/img/anonymous.png'" class="social-pfp" />
                   <div class="user-main-info">
@@ -155,7 +186,7 @@
                 <div class="card-right">
                   <p><strong>Nom :</strong> [[ u.last_name ]]</p>
                   <p><strong>Prénom :</strong> [[ u.first_name ]]</p>
-                  
+
                   <button @click="revealInfo(u)" class="btn-more">
                     [[ u.showMore ? 'Cacher' : 'Voir plus' ]]
                   </button>
@@ -266,18 +297,18 @@
   createApp({
   delimiters: ['[[', ']]'],
   setup() {
-    const activeTab = ref("profile"); // ref(...) variable réactive permet par exemple de changer l'affichage sans recharger la page
+    const activeTab = ref("{{ active_tab|default:'profile' }}");
     const user = ref(null);
     const allUsers = ref([]);
 
 
     const revealInfo = (u) => {
-      
+
       u.showMore = !u.showMore;
 
-      
+
       if (u.showMore) {
-        fetch("/api/consult_profile/", { 
+        fetch("/api/consult_profile/", {
           method: "POST",
           headers: {
             "X-CSRFToken": getCSRFToken()
@@ -286,7 +317,7 @@
         .then(res => res.json())
         .then(data => {
           console.log("Points ajoutés !");
-          user.value.points += 10; 
+          user.value.points += 10;
         });
       }
     };
@@ -318,14 +349,14 @@
 
 
     const filteredSocialUsers = computed(() => {
-      
+
       if (!user.value || !allUsers.value) return []; // si pas de valeur chargé -> liste vide
-      
-      
+
+
       return allUsers.value.filter(u => u.username !== user.value.username);
     });
 
-    
+
     return { activeTab, user, allUsers, filteredSocialUsers, revealInfo, userRank };
   }
 

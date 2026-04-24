@@ -16,6 +16,7 @@ urlpatterns = [
     path("api/user/", views.get_user),
     path("profil/", views.profil_view, name="profil"),
     path("profil/edit/", views.edit_profile, name="edit_profile"),
+    path("profil/change-password/", views.change_password),
     path('api/all_users/', views.api_all_users, name='api_all_users'),
     path('api/consult_profile/', views.consult_profile, name='api_consult_profile'),
 

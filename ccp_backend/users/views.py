@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.http import JsonResponse
+from django.contrib.auth import update_session_auth_hash
 from .models import Profile
 import random
 
@@ -145,7 +146,7 @@ def information_view(request):
 def profil_view(request):
     if not request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
-    
+
     profile, _ = Profile.objects.get_or_create(user=request.user)
     points = profile.points
     rank = get_rank(points)
@@ -181,7 +182,8 @@ def edit_profile(request):
 
     if not request.user.check_password(password):
       return render(request, "profil.html", {
-        "error": "Mot de passe incorrect"
+        "error": "Mot de passe incorrect",
+        "active_tab": "settings"
       })
 
     request.user.first_name = request.POST.get("first_name") or request.user.first_name
@@ -201,6 +203,39 @@ def edit_profile(request):
 
   return redirect("profil")
 
+def change_password(request):
+  if not request.user.is_authenticated:
+    return redirect("accueil")
+
+  if request.method == "POST":
+    old_password = request.POST.get("old_password")
+    new_password = request.POST.get("new_password")
+    confirm_password = request.POST.get("confirm_password")
+
+    if not request.user.check_password(old_password):
+      return render(request, "profil.html", {
+        "ps_error": "Ancien mot de passe incorrect",
+        "active_tab": "settings"
+      })
+
+    if new_password != confirm_password:
+      return render(request, "profil.html", {
+        "password_error": "Les mots de passe ne correspondent pas",
+        "active_tab": "settings"
+      })
+
+    request.user.set_password(new_password)
+    request.user.save()
+
+    update_session_auth_hash(request, request.user)
+
+    return render(request, "profil.html", {
+      "password_message": "Votre mot de passe a bien été modifié",
+      "active_tab": "settings"
+    })
+
+  return redirect("profil")
+
 #Getter
 def get_user(request):
   if not request.user.is_authenticated:
@@ -216,6 +251,7 @@ def get_user(request):
     "birthdate": profile.birth_date,
     "gender": profile.gender,
     "points": profile.points,
+    "type" : profile.type,
     "rank" : get_rank(profile.points),
   })
 
@@ -233,22 +269,22 @@ def get_rank(points):
 #Fonction qui renvoie la liste des utilisateurs au format JSON
 def api_all_users(request):
 
-    profiles = Profile.objects.select_related('user').all() #select_related agit comme une jointure 
+    profiles = Profile.objects.select_related('user').all() #select_related agit comme une jointure
     #pour que django ne refasse pas 10 requetes pour les user
-    
+
     data = []
     for p in profiles:
         data.append({
             "username": p.user.username,
             "last_name": p.user.last_name,
             "first_name": p.user.first_name,
-            "mail": p.user.email,             
-            "role": p.type, 
-            "gender": p.gender,                  
-            "birthdate": str(p.birth_date),   
-            "pfp": "/static/img/anonymous.png" 
+            "mail": p.user.email,
+            "role": p.type,
+            "gender": p.gender,
+            "birthdate": str(p.birth_date),
+            "pfp": "/static/img/anonymous.png"
         })
-    
+
     return JsonResponse(data, safe=False)
 
 def consult_profile(request):

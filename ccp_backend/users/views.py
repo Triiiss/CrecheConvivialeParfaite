@@ -2,8 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth import logout
+from django.core.mail import send_mail
 from django.http import JsonResponse
 from .models import Profile
+import random
 
 
 def connexion_view(request):
@@ -62,6 +64,7 @@ def inscription_view(request):
                 "error": "La crèche n'accepte pas de personnes extérieures"
             })
         else:
+            code = str(random.randint(100000, 999999))
             user = User.objects.create_user(
                 first_name=first_name,
                 last_name=last_name,
@@ -69,10 +72,66 @@ def inscription_view(request):
                 username=username,
                 password=password1
             )
-            Profile.objects.create(user=user, points=1, gender=gender,birth_date=birth_date,type=type)
-            return redirect("connexion")
+            Profile.objects.create(user=user, points=1, gender=gender,birth_date=birth_date,type=type, verification_code=code)
+            send_mail(
+                subject="Votre code de validation",
+                message=f"Votre code est : {code}",
+                from_email="no-reply@tonsite.com",
+                recipient_list=[email],
+            )
+            request.session["verify_user_id"] = user.id
+            return redirect("verify")
 
     return render(request, "inscription.html")
+
+
+def verify_code(request):
+    MAX_ATTEMPTS = 5
+    user_id = request.session.get("verify_user_id")
+
+    if not user_id:
+        return redirect("inscription")
+
+    try:
+        user = User.objects.get(id=user_id)
+        profile = Profile.objects.get(user=user)
+    except (User.DoesNotExist, Profile.DoesNotExist):
+        return redirect("inscription")
+
+    if request.method == "POST":
+        code = request.POST.get("code")
+
+        # ✅ Code correct
+        if profile.verification_code == code:
+            profile.is_verified = True
+            profile.verification_code = None
+            profile.attempts = 0
+            profile.save()
+
+            user.is_active = True
+            user.save()
+
+            del request.session["verify_user_id"]
+
+            return redirect("connexion")
+
+        else:
+            profile.attempts += 1
+            if profile.attempts >= MAX_ATTEMPTS:
+                user.delete()
+                request.session.pop("verify_user_id", None)
+
+                return render(request, "verify.html", {
+                    "error": "Trop de tentatives. Compte supprimé."
+                })
+
+            profile.save()
+
+            return render(request, "verify.html", {
+                "error": f"Code incorrect ({profile.attempts}/{MAX_ATTEMPTS})"
+            })
+
+    return render(request, "verify.html")
 
 
 def accueil_view(request):

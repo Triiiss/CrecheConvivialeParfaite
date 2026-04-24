@@ -41,6 +41,9 @@ class Profile(models.Model):
         default="outsider"
     )
     birth_date = models.DateField(null=True, blank=True)
+    verification_code = models.CharField(max_length=6, null=True, blank=True)
+    is_verified = models.BooleanField(default=False)
+    attempts = models.IntegerField(default=0)
 
     def __str__(self):
         return f"Profil de {self.user.username}"

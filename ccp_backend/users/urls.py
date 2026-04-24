@@ -4,16 +4,21 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("", views.accueil_view, name="accueil"),
+
     path("connexion/", views.connexion_view, name="connexion"),
     path("inscription/", views.inscription_view, name="inscription"),
-    path("", views.accueil_view, name="accueil"),
-    path("information/", views.information_view, name="information"),
-    path("profil/", views.profil_view, name="profil"),
-    path("objets/", views.objets_view, name="objets"),
+    path("verification/", views.verify_code, name="verify"),
+
     path("api/auth/", views.auth_status, name="auth_status"),
     path("logout/", views.logout_view, name="logout"),
+
     path("api/user/", views.get_user),
+    path("profil/", views.profil_view, name="profil"),
     path("profil/edit/", views.edit_profile, name="edit_profile"),
     path('api/all_users/', views.api_all_users, name='api_all_users'),
     path('api/consult_profile/', views.consult_profile, name='api_consult_profile'),
+
+    path("information/", views.information_view, name="information"),
+    path("objets/", views.objets_view, name="objets"),
 ]

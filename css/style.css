@@ -394,6 +394,17 @@ span.required{
   align-items: center;
 }
 
+/*  Confirmation du mot de passe */
+.confirm_password_profile h4{
+  margin: 0;
+  font-size: 18px;
+  opacity: 0.7;
+}
+.confirm_password_profile p{
+  color:rgb(255, 42, 42);
+  font-size: 20px;
+}
+
 /* Affichage des paramètres */
 
 .affichageSettings {
@@ -401,12 +412,12 @@ span.required{
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(10px);
   border-radius: 14px;
+
   display: flex;
   flex-direction: column;
   gap: 12px;
+
   width: 520px;
-  justify-content: center;
-  align-items: flex-start;
   margin: 20px auto 0 auto;
 }
 
@@ -424,6 +435,9 @@ span.required{
   background: rgba(0, 0, 0, 0.3);
   color: white;
   font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 0;
 }
 
 .affichageSettings input::placeholder {
@@ -443,6 +457,20 @@ span.required{
 
 .affichageSettings button:hover {
   background: rgba(255, 24, 24, 1);
+}
+
+.affichageSettings .error-msg {
+
+  color:rgb(255, 42, 42);
+  font-size: 20px;
+
+}
+
+.affichageSettings .success-msg {
+
+  color:rgb(42, 255, 42);
+  font-size: 20px;
+
 }
 
 .affichage h2 {
@@ -497,79 +525,79 @@ span.required{
 }
 
 .main-footer {
-    margin-top: 150px;
-    margin-left: 8%;
-    background: transparent; 
-    color: #000000c2;
-    font-family: Arial, sans-serif;
+  margin-top: 150px;
+  margin-left: 8%;
+  background: transparent;
+  color: #000000c2;
+  font-family: Arial, sans-serif;
 }
 
 
 .footer-container {
-    display: flex; 
-    max-width: 1200px;
-    margin: 0 auto;
+  display: flex;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .footer-column {
-    flex: 1;
-    padding: 0 20px;
+  flex: 1;
+  padding: 0 20px;
 }
 
 .footer-column h2, .footer-column h3 {
-    font-size: 22px;
-    margin-bottom: 15px;
-    color: #000000c2;
-    margin-left: auto;
+  font-size: 22px;
+  margin-bottom: 15px;
+  color: #000000c2;
+  margin-left: auto;
 }
 
 
 .footer-column p {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 10px;
-    
+  font-size: 16px;
+  line-height: 1.5;
+  margin-bottom: 10px;
+
 }
 
 .footer-logo {
-    display: block;
-    margin-top: 15px;
-    max-width: 300px;
-    height: auto;
+  display: block;
+  margin-top: 15px;
+  max-width: 300px;
+  height: auto;
 }
 
 
 .footer-links {
-    list-style: none; 
-    padding: 0;
+  list-style: none;
+  padding: 0;
 }
 
 .footer-links li {
-    margin-bottom: 8px;
+  margin-bottom: 8px;
 }
 
 .footer-links a, .footer-email {
-    color: #000000c2; 
-    transition: color 0.4s ease;
-    text-decoration: none;
-    font-weight: bold;
+  color: #000000c2;
+  transition: color 0.4s ease;
+  text-decoration: none;
+  font-weight: bold;
 }
 
 .footer-links a:hover {
-    color: #ffffff;
-    text-decoration: none;
+  color: #ffffff;
+  text-decoration: none;
 }
 
 
 .footer-bottom {
-    text-align: center;
-    margin-top: 50px;
-    padding-bottom: 20px;
-    margin-right: 140px;
-    padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.575); 
-    font-size: 14px;
-    opacity: 0.8;
+  text-align: center;
+  margin-top: 50px;
+  padding-bottom: 20px;
+  margin-right: 140px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.575);
+  font-size: 14px;
+  opacity: 0.8;
 }
 
 
@@ -644,23 +672,23 @@ span.required{
 
 
 .btn-more {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 20px;
-    padding: 5px 15px;
-    cursor: pointer;
-    font-size: 0.8em;
-    margin-top: 5px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 5px 15px;
+  cursor: pointer;
+  font-size: 0.8em;
+  margin-top: 5px;
 }
 
 .extra-info {
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px dashed #ccc;
-    animation: fadeIn 0.3s;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #ccc;
+  animation: fadeIn 0.3s;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }

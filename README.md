@@ -7,7 +7,7 @@ Afin de mettre en place le site internet :
 - vérifier les migrations 
     * python3 manage.py makemigrations
     * python3 manage.py migrate
-- Lancer le serveur
+- lancer le serveur
     * python3 manage.py runserver
 
 

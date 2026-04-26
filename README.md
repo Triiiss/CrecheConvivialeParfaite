@@ -1,44 +1,20 @@
-[Verse 1]
-Zhēn qíng xiàng cǎo yuán guǎng kuò
-Céng céng fēng yǔ bù néng zǔ gé
-Zǒng yǒu yún kāi rì chū shí hoù
-Wàn zhàng yáng guāng zhào yào nǐ wǒ
+Ceci est un projet de développement Web côté serveur dans le cadre d'étude d'ingénieur
+C'est un site internet sur le thème d'une crèche pour les enfants et les parents
 
-[Verse 2]
-Zhēn qíng xiàng méi huā kāi guò
-Lěng lěng bīng xuě bù néng yān mò
-Jiù zài zuì lěng zhī tóu zhàn fàng
-Kàn jiàn chūn tiān zǒu xiàng nǐ wǒ
-
-[Chorus]
-Xuě huā piāo piāo běi fēng xiāo xiāo
-Tiān dì yí piàn cāng máng
-Yì jiǎn hán méi ào lì xuě zhōng
-Zhǐ wéi yī rén piāo xiāng
-Ài wǒ suǒ ài wú yuàn wú huǐ
-Cǐ qíng cháng liú xīn jiān
-
-[Instumental Solo]
-
-[Chorus]
-Xuě huā piāo piāo běi fēng xiāo xiāo
-Tiān dì yí piàn cāng máng
-Yì jiǎn hán méi ào lì xuě zhōng
-Zhǐ wéi yī rén piāo xiāng
-Ài wǒ suǒ ài wú yuàn wú huǐ
-Cǐ qíng cháng liú xīn jiān
+Afin de mettre en place le site internet :
+- installer la dernière version de Django
+- aller dans le dossier ccp_backend (adjascent à static/ users/ et venv/)
+- vérifier les migrations 
+    >> python3 manage.py makemigrations
+    >> python3 manage.py migrate
+- Lancer le serveur
+    >> python3 manage.py runserver
 
 
-
-Principe :
-Crèche connectée 
-Utilisateurs : enfants, les encadrants, les parents
-
-Objets connectés : 
-- Chauffeur de biberon connecté;
-- Boîte de jouets connectés;
-- Projecteur pour la sieste et le ciel;
-- Haut parleur connecté (musique, voix, berceuse)
-- Radiateur connecté
-
-Thème : Chine et le pays imaginaire promis
+Créateurs :
+ING1 GI1
+Thémis TRAN TU THIEN
+Gweltaz COLLIN
+Yann KONG
+Hicham AHSAINI
+Laurent BOUSQUET

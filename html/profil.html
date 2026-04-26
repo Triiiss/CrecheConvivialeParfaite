@@ -274,6 +274,7 @@
       }
 
       const isAuthenticated = ref(false)
+      const rank = ref(null)
 
       fetch("/api/auth/")
         .then(res => res.json())
@@ -298,7 +299,7 @@
                 return true
             })
         })
-        
+
       return { filteredLinks, logout }
     }
   }).mount("#banner")

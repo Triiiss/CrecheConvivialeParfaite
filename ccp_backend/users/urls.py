@@ -29,5 +29,6 @@ urlpatterns = [
     path('api/objets/update/<int:object_id>/', views.api_update_status, name='api_update_status'),
     path('api/objets/add/', views.api_add_objet, name='api_add_objet'),
     path('api/objets/delete/<int:object_id>/', views.api_delete_objet, name='api_delete_objet'),
-    
+    path("statistiques/", views.statistiques_view, name="statistiques"),
+    path("statistiques/export/", views.export_csv_view, name="export_csv"),
 ]

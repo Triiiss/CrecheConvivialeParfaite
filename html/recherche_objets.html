@@ -193,6 +193,7 @@
             { name: "Information", url: "/information/", slug:"information", auth: null },
             { name: "Profil", url: "/profil/", slug:"profil", auth: true},
             { name: "Objets", url: "/objets/", slug:"objets", auth: true },
+            { name: "Gestion", url: "/gestion/", slug:"gestion", auth: true, minRank: "Avancé"},
             { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
             { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false },
             { name: "Déconnexion", action: "logout", isLogin: true,auth: true }
@@ -219,19 +220,26 @@
             fetch("/api/auth/")
             .then(res => res.json())
             .then(data => {
-            isAuthenticated.value = data.isAuthenticated
+                isAuthenticated.value = data.isAuthenticated
+                rank.value = data.rank
             })
-
+            const rankOrder = ["Débutant", "Intermédiaire", "Avancé", "Expert"]
 
             const filteredLinks = computed(() => {
-            return links.value.filter(link => {
-            if (link.slug === currentPage) return false
-            if (link.auth === true && !isAuthenticated.value) return false
-            if (link.auth === false && isAuthenticated.value) return false
+                return links.value.filter(link => {
+                    if (link.slug === currentPage) return false
+                    if (link.auth === true && !isAuthenticated.value) return false
+                    if (link.auth === false && isAuthenticated.value) return false
 
-            return true
+                    if (link.minRank) {
+                        if (!rank.value) return false
+                        return rankOrder.indexOf(rank.value) >= rankOrder.indexOf(link.minRank)
+                    }
+
+                    return true
+                })
             })
-            })
+
             return { filteredLinks, logout}
             }
             }).mount("#banner")

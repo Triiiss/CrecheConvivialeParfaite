@@ -2,7 +2,7 @@
 
 <html>
     <head>
-        <title>CCP - Verification</title>
+        <title>CCP - Gestion</title>
         <meta charset="utf-8"/>
         <link rel="icon" href="/static//img/logoPanda.png"/>
         <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
@@ -10,71 +10,9 @@
     </head>
 
     <body>
-        <form style="display:none;">{% csrf_token %}</form>
-
         <div id="body">
-            <h1 class="titre">La Crèche Conviviale Parfaite</h1>
 
-            <header>            <!-- Bannière + liens -->
-                <nav id="banner">
-                    <a v-for="link in filteredLinks"
-                        :href="link.url"
-                        :key="link.name"
-                        @click="link.action === 'logout' ? logout($event) : null"
-                        :class="{ loginLink: link.isLogin }">
-                        [[ link.name ]]
-                    </a>
-                    <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
-                    <a href="https://miro.com/welcomeonboard/V1hhcXp3VnczdG5lNTJJdGlwaHlpT0tVWit3TWFhZmhOVFE5Mmg1ZllQcHZSNUJvVThQWmh6WVFIZDVwWE5GY0I5YzRob296ZExlTGVib294UXFjR3RzNVJRaW52VlozZUZLc1JhNWpIakJhWldjNHd0R0FZUXRNd1FBNHNhU01nbHpza3F6REdEcmNpNEFOMmJXWXBBPT0hdjE=?share_link_id=631888282038" target="_blank">Le plan</a>
-                    <a href="https://www.youtube.com/watch?v=ThJwLNaeckM" target="_blank">Équipe</a>
-                    <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
-                </nav>
-            </header>
-
-            <h2>Inscription</h2>
-
-            <form method="POST">
-                {% csrf_token %}
-                <input type="text" name="code" placeholder="Code reçu" required>
-                {% if error %}
-                    <p style="color:red;">{{ error }}</p>
-                {% endif %}
-                <button type="submit">Valider</button>
-            </form>
-
-            <footer class="main-footer" style="margin-top: 600px;">
-                <div class="footer-container">
-                    <div class="footer-column">
-                        <h2>Crèche Conviviale et Parfaite</h2>
-                        <p>Laissez vos enfant chez nous ^^.</p>
-                        <img src="/static/img/logo.png" alt="Logo" class="footer-logo">
-                    </div>
-
-                    <div class="footer-column">
-                        <h3>Ou nous trouver</h3>
-                        <p>Av. du Parc, 95000 Cergy</p>
-                        <p>2 Av. Adolphe Chauvin, 95300 Pontoise</p>
-                        <p>01 23 45 67 89</p>
-                        <p><a href="mailto:exemple@mail.com" class="footer-email">ccp@mail.com</a></p>
-                    </div>
-
-                    <div class="footer-column">
-                        <h3>Navigation</h3>
-                        <ul class="footer-links">
-                            <li><a href="/">Accueil</a></li>
-                            <li><a href="/recherche/">Recherche</a></li>
-                            <li><a href="/connexion/">Connexion</a></li>
-                            <li><a href="/inscription/">Inscription</a></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="footer-bottom">
-                    <p>copyright © 2026, Crèche Conviviale et Parfaite</p>
-                </div>
-            </footer>
         </div>
-
         <script>
             const { createApp, ref, computed } = Vue
 

@@ -24,5 +24,6 @@ urlpatterns = [
     path("information/", views.information_view, name="information"),
     path('api/information/', views.information_api),
     path("objets/", views.objets_view, name="objets"),
+    path("api/objets/", views.objets_list, name="api_objets"),
     path("gestion/", views.gestion_view, name="gestion"),
 ]

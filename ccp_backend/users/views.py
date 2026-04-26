@@ -5,8 +5,9 @@ from django.contrib.auth import logout
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
-from .models import Profile
 from .models import Information
+from .models import Profile
+from .models import Objet
 import random
 
 
@@ -169,6 +170,11 @@ def objets_view(request):
     return render(request, 'recherche_objets.html')
 
 
+def objets_list(request):
+    objets = list(Objet.objects.values())
+    return JsonResponse(objets, safe=False)
+
+
 def gestion_view(request):
     if not request.user.is_authenticated or request.user.profile.points < 500:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
         return redirect("accueil")
@@ -176,15 +182,19 @@ def gestion_view(request):
 
 
 def auth_status(request):
-    if request.user.is_authenticated:
-        points = request.user.profile.points  # adapte si besoin
-        rank = get_rank(points)
-    else:
-        rank = None
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            "isAuthenticated": False,
+            "rank": None,
+            "points": 0
+        })
+
+    profile, _ = Profile.objects.get_or_create(user=request.user)
 
     return JsonResponse({
-        "isAuthenticated": request.user.is_authenticated,
-        "rank": rank
+        "isAuthenticated": True,
+        "rank": get_rank(profile.points),
+        "points": profile.points
     })
 
 

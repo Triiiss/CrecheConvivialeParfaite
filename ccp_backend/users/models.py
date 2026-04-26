@@ -80,3 +80,38 @@ class Information(models.Model):
 
     def __str__(self):
         return self.name
+    
+
+class Objet(models.Model):
+    PLACE_CHOICES = [
+        ("cuisine", "Cuisine"),
+        ("salle-principale", "Salle principale"),
+        ("dortoir", "Dortoir"),
+        ("toutes-ailes", "Toutes les ailes"),
+    ]
+
+    STATUS_CHOICES = [
+        ("allume", "Allumé"),
+        ("eteint", "Éteint"),
+        ("veille", "En veille"),
+    ]
+
+    TARGET_CHOICES = [
+        ("enfant", "Enfant"),
+        ("encadrant", "Encadrant"),
+    ]
+
+    CATEGORY_CHOICES = [
+        ("alimentation", "Alimentation"),
+        ("divertissement", "Divertissement"),
+        ("confort", "Confort"),
+    ]
+
+    name = models.CharField(max_length=255)
+    place = models.CharField(max_length=50, choices=PLACE_CHOICES)
+    target = models.CharField(max_length=50, choices=TARGET_CHOICES)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+
+    def __str__(self):
+        return self.name

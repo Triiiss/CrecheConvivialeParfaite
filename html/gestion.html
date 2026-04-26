@@ -28,11 +28,102 @@
                     <a href="https://fr.china-embassy.gov.cn/fra/" target="_blank">Contact</a>
                 </nav>
             </header>
+    
+            <div id="gestion-app">
+                <div class="layout">
+                    <div class="menu">
+                        <button @click="activeTab = 'add_del'">Ajout / Suppression</button>
+                        <button @click="activeTab = 'status'">État</button>
+                    </div>
 
-            <h2>Gestion</h2>
+                    <div class="affichage">
+
+                        <div v-if="activeTab === 'add_del'">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h2 style="color: black;">Gestion des Objets</h2>
+                                <button @click="showForm = !showForm" class="loginLink">
+                                    [[ showForm ? 'Fermer' : 'Créer un objet' ]]
+                                </button>
+                            </div>
+
+                            <div v-if="showForm" class="card" style="max-width: 500px; margin: 0 auto 30px auto; text-align: left; padding: 20px; border: 1px solid #ccc;">
+                                <h3 style="color: black; margin-top: 0;">Nouvel Objet</h3>
+                                
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: black; display: block;">Nom de l'objet :</label>
+                                    <input v-model="newObject.name" type="text" placeholder="Ex: Lampe" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                                </div>
+
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: black; display: block;">Lieu :</label>
+                                    <select v-model="newObject.place" style="width: 100%; padding: 8px;">
+                                        <option value="cuisine">Cuisine</option>
+                                        <option value="salle-principale">Salle principale</option>
+                                        <option value="dortoir">Dortoir</option>
+                                        <option value="toutes-ailes">Toutes les ailes</option>
+                                    </select>
+                                </div>
+
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: black; display: block;">Cible :</label>
+                                    <select v-model="newObject.target" style="width: 100%; padding: 8px;">
+                                        <option value="enfant">Enfant</option>
+                                        <option value="encadrant">Encadrant</option>
+                                    </select>
+                                </div>
+
+                                <div style="margin-bottom: 15px;">
+                                    <label style="color: black; display: block;">Catégorie :</label>
+                                    <select v-model="newObject.category" style="width: 100%; padding: 8px;">
+                                        <option value="alimentation">Alimentation</option>
+                                        <option value="divertissement">Divertissement</option>
+                                        <option value="confort">Confort</option>
+                                    </select>
+                                </div>
+
+                                <button @click="addObject" class="loginLink" style="width: 100%; padding: 10px;">Enregistrer dans la crèche</button>
+                            </div>
+
+                            <h3 style="color: black;">Liste des objets existants</h3>
+                            <div class="grid">
+                                <div v-for="item in items" :key="item.id" class="card card-gestion">
+                                    <strong style="color: black;">[[ item.name ]]</strong><br>
+                                    <span style="color: #666; font-size: 0.8em;">[[ item.place ]] ([[ item.target ]])</span>
+                                    <button @click="deleteObject(item.id)" style="background: #e74c3c; color: white; border: none; padding: 5px; width: 100%; margin-top: 10px; cursor: pointer; border-radius: 5px; margin: center; ">
+                                        Supprimer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div v-if="activeTab === 'status'">
+                           <h2>Contrôle des États</h2>
+                            <div class="grid">
+                                <div v-for="item in items" :key="item.id" class="card card-gestion">
+                                    <strong>[[ item.name ]]</strong><br>
+                                    <span style="color: black;">Lieu : [[ item.place ]]</span><br>
+                                    
+                                    <p style="color: black;">
+                                        État actuel : 
+                                        <span :class="getStatusClass(item.status)" style="font-weight: bold;">
+                                            [[ item.status ]]
+                                        </span>
+                                    </p>
+                                    
+                                    <select v-model="item.status" @change="updateStatus(item)">
+                                        <option value="allume">Allumé</option>
+                                        <option value="eteint">Éteint</option>
+                                        <option value="veille">En veille</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
 
-            <footer class="main-footer" style="margin-top: 600px;">
+            <footer class="main-footer" style="margin-top: 200px;">
                 <div class="footer-container">
                     <div class="footer-column">
                         <h2>Crèche Conviviale et Parfaite</h2>
@@ -66,6 +157,7 @@
         </div>
 
         <script>
+
             const { createApp, ref, computed } = Vue
 
             function getCSRFToken() {
@@ -80,11 +172,9 @@
                 setup() {
                     const links = ref([
                         { name: "Accueil", url: "/", slug:"", auth: null},
-                        { name: "Recherche", url: "/recherche/", slug:"recherche", auth: null },
                         { name: "Profil", url: "/profil/", slug:"profil", auth: true},
                         { name: "Objets", url: "/objets/", slug:"objets", auth: true },
                         { name: "Gestion", url: "/gestion/", slug:"gestion", auth: true, minRank: "Avancé"},
-                        { name: "Statistiques", url: "/statistiques/", slug:"statistiques", auth: true, minRank: "Avancé" },
                         { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
                         { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false },
                         { name: "Déconnexion", action: "logout", isLogin: true,auth: true }
@@ -133,9 +223,109 @@
                         })
                     })
 
-                    return { filteredLinks, logout }
+                    
+
+                    return { filteredLinks, logout}
                 }
             }).mount("#banner")
+
+
+            createApp({
+                delimiters: ['[[', ']]'],
+                setup() {
+                    const activeTab = ref("add_del");
+                    const items = ref([]);
+                    const showForm = ref(false);
+                    
+                    const newObject = ref({
+                        name: "",
+                        place: "cuisine",
+                        status: "eteint",
+                        target: "encadrant",
+                        category: "confort"
+                    });
+
+                    const loadObjects = () => {
+                        fetch("/api/objets/")
+                            .then(res => res.json())
+                            .then(data => { items.value = data; });
+                    };
+
+
+                    const addObject = () => {
+                        if(!newObject.value.name) return alert("Veuillez donner un nom à l'objet");
+                        
+                        fetch("/api/objets/add/", {
+                            method: "POST",
+                            headers: { 
+                                "Content-Type": "application/json", 
+                                "X-CSRFToken": getCSRFToken() 
+                            },
+                            body: JSON.stringify(newObject.value)
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if(data.error) {
+                                alert("Erreur : " + data.error);
+                            } else {
+                                showForm.value = false; 
+                                newObject.value = { name: "", place: "cuisine", target: "encadrant", category: "confort", status: "eteint" };
+                                loadObjects(); 
+                            }
+                        });
+                    };
+
+                    const deleteObject = (id) => {
+                        if(confirm("Supprimer définitivement cet objet ?")) {
+                            fetch(`/api/objets/delete/${id}/`, {
+                                method: "DELETE",
+                                headers: { "X-CSRFToken": getCSRFToken() }
+                            }).then(() => loadObjects());
+                        }
+                    };
+
+
+                    loadObjects();
+
+
+                    const updateStatus = (item) => {
+                        fetch(`/api/objets/update/${item.id}/`, {
+                            method: "POST",
+                            headers: { 
+                                "Content-Type": "application/json",
+                                "X-CSRFToken": getCSRFToken() 
+                            },
+                            body: JSON.stringify({ status: item.status })
+                        })
+                        .then(res => {
+                            if (!res.ok) alert("Erreur lors de la mise à jour");
+                            else console.log("Statut mis à jour en BDD pour", item.name);
+                        });
+                    };
+
+                    const getStatusClass = (status) => {
+                        if (status === 'allume') return 'status-green';
+                        if (status === 'eteint') return 'status-red';
+                        if (status === 'veille') return 'status-yellow';
+                        return '';
+                    };
+
+                    loadObjects();
+
+                    return {
+                        activeTab, 
+                        items, 
+                        showForm, 
+                        newObject, 
+                        addObject, 
+                        deleteObject, 
+                        updateStatus,
+                        getStatusClass 
+                    }
+                }
+            }).mount("#gestion-app")
+
+
         </script>
     </body>
 </html>

@@ -158,12 +158,27 @@ def profil_view(request):
 
 
 def objets_view(request):
+    if not request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
+        return redirect("accueil")
     return render(request, 'recherche_objets.html')
 
 
+def gestion_view(request):
+    if not request.user.is_authenticated or request.user.profile.points < 500:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
+        return redirect("accueil")
+    return render(request, 'gestion.html')
+
+
 def auth_status(request):
+    if request.user.is_authenticated:
+        points = request.user.profile.points  # adapte si besoin
+        rank = get_rank(points)
+    else:
+        rank = None
+
     return JsonResponse({
-        "isAuthenticated": request.user.is_authenticated
+        "isAuthenticated": request.user.is_authenticated,
+        "rank": rank
     })
 
 
@@ -268,7 +283,6 @@ def get_rank(points):
 
 #Fonction qui renvoie la liste des utilisateurs au format JSON
 def api_all_users(request):
-
     profiles = Profile.objects.select_related('user').all() #select_related agit comme une jointure
     #pour que django ne refasse pas 10 requetes pour les user
 
@@ -286,6 +300,7 @@ def api_all_users(request):
         })
 
     return JsonResponse(data, safe=False)
+
 
 def consult_profile(request):
     if not request.user.is_authenticated:

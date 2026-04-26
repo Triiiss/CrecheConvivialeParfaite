@@ -23,4 +23,5 @@ urlpatterns = [
 
     path("information/", views.information_view, name="information"),
     path("objets/", views.objets_view, name="objets"),
+    path("gestion/", views.gestion_view, name="gestion"),
 ]

@@ -140,7 +140,7 @@
                         { name: "Déconnexion", action: "logout", isLogin: true,auth: true }
                     ])
 
-                    const currentPbirth_date = window.location.pathname.replaceAll("/", "")
+                    const currentPage = window.location.pathname.replaceAll("/", "")
 
                     const logout = () => {
                         fetch("/logout/", {

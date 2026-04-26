@@ -130,13 +130,16 @@
                 const statusFilter = ref("")
                 const targetFilter = ref("")
 
-                const items = ref([
-                    { name: "Chauffeur de biberon connecté", place: "cuisine", target: "encadrant", category: "alimentation", status: "eteint"},
-                    { name: "Boîte de jouets connectés", place: "salle-principale", target: "enfant", category: "divertissement", status: "allume" },
-                    { name: "Projecteur pour la sieste", place: "dortoir", target: "enfant", category: "confort", status: "veille"},
-                    { name: "Haut-parleur connecté", place: "dortoir", target: "encadrant", category: "divertissement", status: "allume" },
-                    { name: "Radiateur connecté", place: "toutes-ailes", target: "encadrant", category: "confort", status: "allume" }
-                ].map(i => ({ ...i, showMore: false })));
+                const items = ref([]);
+
+                fetch("/api/objets/")
+                .then(res => res.json())
+                .then(data => {
+                    items.value = data.map(i => ({
+                        ...i,
+                        showMore: false
+                    }))
+                })
 
                 const toggleAndReward = (item) => {
                     item.showMore = !item.showMore;

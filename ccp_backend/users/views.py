@@ -401,3 +401,46 @@ def api_delete_objet(request, object_id):
             return JsonResponse({"error": "Objet non trouvé"}, status=404)
     
     return JsonResponse({"error": "Méthode non autorisée"}, status=405)
+    
+def statistiques_view(request):
+    objets = Objet.objects.all()
+    total = objets.count()
+
+    allumes = objets.filter(status="allume").count()
+    eteints = objets.filter(status="eteint").count()
+    veille = objets.filter(status="veille").count()
+
+    par_lieu = dict(Counter(o.get_place_display() for o in objets))
+    par_cat = dict(Counter(o.get_category_display() for o in objets))
+
+    surveillance = objets.filter(status="allume", target="enfant")
+    maintenance = objets.filter(status="veille")
+
+    conso = allumes * 100 + veille * 10
+
+    contexte = {
+        "total": total,
+        "allumes": allumes,
+        "eteints": eteints,
+        "veille": veille,
+        "par_lieu": par_lieu,
+        "par_cat": par_cat,
+        "surveillance": surveillance,
+        "maintenance": maintenance,
+        "conso": conso,
+    }
+    return render(request, "statistiques.html", contexte)
+
+
+def export_csv_view(request):
+    response = HttpResponse(content_type="text/csv; charset=utf-8-sig")
+    response["Content-Disposition"] = 'attachment; filename="rapport.csv"'
+    response.write('\ufeff')
+
+    writer = csv.writer(response)
+    writer.writerow(["Nom", "Lieu", "Cible", "Categorie", "Statut"])
+
+    for o in Objet.objects.all():
+        writer.writerow([o.name, o.get_place_display(), o.get_target_display(), o.get_category_display(), o.get_status_display()])
+
+    return response

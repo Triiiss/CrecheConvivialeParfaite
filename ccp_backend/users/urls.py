@@ -26,4 +26,6 @@ urlpatterns = [
     path("objets/", views.objets_view, name="objets"),
     path("api/objets/", views.objets_list, name="api_objets"),
     path("gestion/", views.gestion_view, name="gestion"),
+    path("statistiques/", views.statistiques_view, name="statistiques"),
+    path("statistiques/export/", views.export_csv_view, name="export_csv"),
 ]

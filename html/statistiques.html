@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>CCP - Statistiques</title>
+    <link rel="icon" href="/static/img/logoPanda.png"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <style>
+        .stats { padding: 20px; max-width: 900px; margin: auto; }
+        .cards { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
+        .card { flex: 1; min-width: 130px; padding: 15px; background: #eee; text-align: center; border: 1px solid #ccc; }
+        .card .nb { font-size: 28px; font-weight: bold; }
+        .section { margin-bottom: 25px; }
+        .section h2 { border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .ligne { margin: 5px 0; }
+        .ligne .label { display: inline-block; width: 180px; }
+        .barre { display: inline-block; background: #888; height: 18px; vertical-align: middle; padding: 0 5px; color: white; min-width: 25px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background: white; }
+        th, td { padding: 6px; border: 1px solid #ccc; text-align: left; }
+        th { background: #ddd; }
+        .bouton { display: inline-block; padding: 8px 15px; background: #444; color: white; text-decoration: none; }
+    </style>
+</head>
+<body>
+<div id="body">
+    <h1 class="titre">La Crèche Conviviale Parfaite</h1>
+
+    <header>
+        <nav id="banner">
+            <a v-for="link in filteredLinks"
+               :href="link.url"
+               :key="link.name"
+               @click="link.action === 'logout' ? logout($event) : null"
+               :class="{ loginLink: link.isLogin }">
+                [[ link.name ]]
+            </a>
+            <a href="https://github.com/Triiiss/CrecheConvivialeParfaite" target="_blank">Git</a>
+        </nav>
+    </header>
+
+    <div class="stats">
+        <h1>Statistiques et surveillance</h1>
+
+        <div class="cards">
+            <div class="card"><div class="nb">{{ total }}</div>Total objets</div>
+            <div class="card"><div class="nb">{{ allumes }}</div>Allumes</div>
+            <div class="card"><div class="nb">{{ veille }}</div>En veille</div>
+            <div class="card"><div class="nb">{{ eteints }}</div>Eteints</div>
+            <div class="card"><div class="nb">{{ conso }} W</div>Conso estimee</div>
+        </div>
+
+        <div class="section">
+            <h2>Repartition par lieu</h2>
+            {% for lieu, nb in par_lieu.items %}
+                <div class="ligne">
+                    <span class="label">{{ lieu }}</span>
+                    <span class="barre" style="width: {% widthratio nb total 250 %}px;">{{ nb }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2>Repartition par categorie</h2>
+            {% for cat, nb in par_cat.items %}
+                <div class="ligne">
+                    <span class="label">{{ cat }}</span>
+                    <span class="barre" style="width: {% widthratio nb total 250 %}px;">{{ nb }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="section">
+            <h2>Objets a surveiller</h2>
+            <p>Objets allumes destines aux enfants.</p>
+            {% if surveillance %}
+                <table>
+                    <tr><th>Nom</th><th>Lieu</th><th>Categorie</th></tr>
+                    {% for o in surveillance %}
+                        <tr><td>{{ o.name }}</td><td>{{ o.get_place_display }}</td><td>{{ o.get_category_display }}</td></tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Aucun objet a surveiller.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Objets a verifier (maintenance)</h2>
+            <p>Objets en veille qui consomment sans etre utilises.</p>
+            {% if maintenance %}
+                <table>
+                    <tr><th>Nom</th><th>Lieu</th><th>Categorie</th></tr>
+                    {% for o in maintenance %}
+                        <tr><td>{{ o.name }}</td><td>{{ o.get_place_display }}</td><td>{{ o.get_category_display }}</td></tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>Aucun objet en veille.</p>
+            {% endif %}
+        </div>
+
+        <div class="section">
+            <h2>Telecharger le rapport</h2>
+            <a href="/statistiques/export/" class="bouton">Exporter en CSV</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const { createApp, ref, computed } = Vue
+
+    function getCSRFToken() {
+        return document.cookie
+            .split("; ")
+            .find(row => row.startsWith("csrftoken"))
+            ?.split("=")[1]
+    }
+
+    createApp({
+        delimiters: ['[[', ']]'],
+        setup() {
+            const links = ref([
+                { name: "Accueil", url: "/", slug:"", auth: null},
+                { name: "Information", url: "/information/", slug:"information", auth: null },
+                { name: "Profil", url: "/profil/", slug:"profil", auth: true},
+                { name: "Objets", url: "/objets/", slug:"objets", auth: true },
+                { name: "Gestion", url: "/gestion/", slug:"gestion", auth: true},
+                { name: "Statistiques", url: "/statistiques/", slug:"statistiques", auth: true },
+                { name: "Connexion", url: "/connexion/", isLogin: true, slug:"connexion", auth: false },
+                { name: "Inscription", url: "/inscription/", isLogin: true, slug:"inscription", auth: false },
+                { name: "Déconnexion", action: "logout", isLogin: true, auth: true }
+            ])
+
+            const currentPage = window.location.pathname.replaceAll("/", "")
+
+            const logout = () => {
+                fetch("/logout/", {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "X-CSRFToken": getCSRFToken() }
+                })
+                .then(() => {
+                    isAuthenticated.value = false
+                    window.location.href = "/"
+                })
+            }
+
+            const isAuthenticated = ref(false)
+
+            fetch("/api/auth/")
+                .then(res => res.json())
+                .then(data => { isAuthenticated.value = data.isAuthenticated })
+
+            const filteredLinks = computed(() => {
+                return links.value.filter(link => {
+                    if (link.slug === currentPage) return false
+                    if (link.auth === true && !isAuthenticated.value) return false
+                    if (link.auth === false && isAuthenticated.value) return false
+                    return true
+                })
+            })
+            return { filteredLinks, logout }
+        }
+    }).mount("#banner")
+</script>
+</body>
+</html>

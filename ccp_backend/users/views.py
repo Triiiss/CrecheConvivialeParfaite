@@ -364,15 +364,30 @@ def api_get_objets(request):
     return JsonResponse(data, safe=False)
 
 
-
 def api_update_status(request, object_id):
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return JsonResponse({"error": "not authenticated"}, status=401)
+            
         try:
             data = json.loads(request.body)
             objet = Objet.objects.get(id=object_id)
-            objet.status = data.get('status')
+
+            objet.status = data.get('status', objet.status)
+            objet.place = data.get('place', objet.place)
+            objet.target = data.get('target', objet.target)
+            objet.category = data.get('category', objet.category)
             objet.save()
-            return JsonResponse({"message": "Statut mis à jour avec succès"})
+
+            profile, _ = Profile.objects.get_or_create(user=request.user)
+            profile.points += 5
+            profile.save()
+
+            return JsonResponse({
+                "success": True, 
+                "message": "Objet mis à jour et +5 points !",
+                "new_points": profile.points
+            })
         except Objet.DoesNotExist:
             return JsonResponse({"error": "Objet non trouvé"}, status=404)
         
@@ -389,6 +404,11 @@ def api_add_objet(request):
                 category=data.get('category'),
                 status=data.get('status', 'eteint')
             )
+
+            profile, _ = Profile.objects.get_or_create(user=request.user)
+            profile.points += 10
+            profile.save()
+
             return JsonResponse({"message": "Objet ajouté avec succès", "id": nouvel_objet.id})
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=400)
@@ -399,11 +419,17 @@ def api_delete_objet(request, object_id):
         try:
             objet = Objet.objects.get(id=object_id)
             objet.delete()
+
+            profile, _ = Profile.objects.get_or_create(user=request.user)
+            profile.points += 10
+            profile.save()
+
             return JsonResponse({"message": "Objet supprimé avec succès"})
         except Objet.DoesNotExist:
             return JsonResponse({"error": "Objet non trouvé"}, status=404)
     
     return JsonResponse({"error": "Méthode non autorisée"}, status=405)
+
     
 def statistiques_view(request):
     objets = Objet.objects.all()

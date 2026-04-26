@@ -10,6 +10,9 @@ from .models import Profile
 from .models import Objet
 import random
 import json
+from django.http import HttpResponse
+from collections import Counter
+import csv
 
 
 def connexion_view(request):

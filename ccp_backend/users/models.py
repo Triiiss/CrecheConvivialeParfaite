@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth.models import User as AuthUser
+from django.db import models
 
 
 class User(models.Model):
@@ -47,3 +47,36 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profil de {self.user.username}"
+    
+
+class Information(models.Model):
+    PLACE_CHOICES = [
+        ("aile-ouest", "Aile Ouest"),
+        ("aile-est", "Aile Est"),
+        ("salle-principale", "Salle principale"),
+        ("exterieur", "Extérieur"),
+    ]
+
+    TARGET_CHOICES = [
+        ("parent", "Parent"),
+        ("enfant-0-5", "Enfant < 5 ans"),
+        ("enfant-5-10", "Enfant 5–10 ans"),
+        ("encadrant", "Encadrant"),
+    ]
+
+    CATEGORY_CHOICES = [
+        ("transport", "Transport"),
+        ("divertissement", "Divertissement"),
+        ("nourriture", "Nourriture"),
+        ("activite", "Activité"),
+        ("cours", "Cours"),
+    ]
+
+    name = models.CharField(max_length=255)
+    place = models.CharField(max_length=50, choices=PLACE_CHOICES)
+    target = models.CharField(max_length=50, choices=TARGET_CHOICES)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    date = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name

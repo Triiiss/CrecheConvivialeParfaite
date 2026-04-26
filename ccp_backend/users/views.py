@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.contrib.auth import update_session_auth_hash
 from .models import Profile
+from .models import Information
 import random
 
 
@@ -140,7 +141,12 @@ def accueil_view(request):
 
 
 def information_view(request):
-    return render(request, 'information.html')
+   return render(request, 'information.html')
+
+
+def information_api(request):
+    items = list(Information.objects.values())
+    return JsonResponse(items, safe=False)
 
 
 def profil_view(request):

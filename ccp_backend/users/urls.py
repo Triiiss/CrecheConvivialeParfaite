@@ -22,6 +22,7 @@ urlpatterns = [
     path('api/consult_object/', views.consult_object, name='api_consult_object'),
 
     path("information/", views.information_view, name="information"),
+    path('api/information/', views.information_api),
     path("objets/", views.objets_view, name="objets"),
     path("gestion/", views.gestion_view, name="gestion"),
 ]

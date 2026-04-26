@@ -706,3 +706,11 @@ span.required{
     padding: 3px 12px;
     cursor: pointer;
 }
+
+.card-gestion {
+    max-width: 280px; 
+    margin: 30px auto;
+    margin-right: 10px;
+    padding-right: 50px;
+
+}

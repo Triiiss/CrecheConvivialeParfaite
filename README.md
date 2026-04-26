@@ -5,10 +5,10 @@ Afin de mettre en place le site internet :
 - installer la dernière version de Django
 - aller dans le dossier ccp_backend (adjascent à static/ users/ et venv/)
 - vérifier les migrations 
-    >> python3 manage.py makemigrations
-    >> python3 manage.py migrate
+    * python3 manage.py makemigrations
+    * python3 manage.py migrate
 - Lancer le serveur
-    >> python3 manage.py runserver
+    * python3 manage.py runserver
 
 
 Créateurs :

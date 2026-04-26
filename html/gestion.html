@@ -97,24 +97,37 @@
                         </div>
 
                         <div v-if="activeTab === 'status'">
-                           <h2>Contrôle des États</h2>
+                            <h2 style="color: black;">Contrôle et Édition des Objets</h2>
                             <div class="grid">
-                                <div v-for="item in items" :key="item.id" class="card card-gestion">
-                                    <strong>[[ item.name ]]</strong><br>
-                                    <span style="color: black;">Lieu : [[ item.place ]]</span><br>
+                                <div v-for="item in items" :key="item.id" class="card card-gestion" style="max-width: 300px; text-align: left;">
+                                    <strong style="color: black; font-size: 1.1em;">[[ item.name ]]</strong><br>
                                     
-                                    <p style="color: black;">
-                                        État actuel : 
-                                        <span :class="getStatusClass(item.status)" style="font-weight: bold;">
-                                            [[ item.status ]]
-                                        </span>
-                                    </p>
-                                    
-                                    <select v-model="item.status" @change="updateStatus(item)">
+                                    <label style="color: gray; font-size: 0.8em;">Lieu :</label>
+                                    <select v-model="item.place" @change="updateStatus(item)" style="width: 100%; margin-bottom: 8px;">
+                                        <option value="cuisine">Cuisine</option>
+                                        <option value="salle-principale">Salle principale</option>
+                                        <option value="dortoir">Dortoir</option>
+                                        <option value="toutes-ailes">Toutes les ailes</option>
+                                    </select>
+
+                                    <label style="color: gray; font-size: 0.8em;">Cible :</label>
+                                    <select v-model="item.target" @change="updateStatus(item)" style="width: 100%; margin-bottom: 8px;">
+                                        <option value="enfant">Enfant</option>
+                                        <option value="encadrant">Encadrant</option>
+                                    </select>
+
+                                    <label style="color: gray; font-size: 0.8em;">État :</label>
+                                    <select v-model="item.status" @change="updateStatus(item)" style="width: 100%;">
                                         <option value="allume">Allumé</option>
                                         <option value="eteint">Éteint</option>
                                         <option value="veille">En veille</option>
                                     </select>
+
+                                    <div style="margin-top: 10px; text-align: center;">
+                                        <span :class="getStatusClass(item.status)" style="font-weight: bold; font-size: 0.9em;">
+                                            [[ item.status.toUpperCase() ]]
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +266,7 @@
 
 
                     const addObject = () => {
-                        if(!newObject.value.name) return alert("Veuillez donner un nom à l'objet");
+                        if(!newObject.value.name) return alert("Le nom est obligatoire");
                         
                         fetch("/api/objets/add/", {
                             method: "POST",
@@ -265,22 +278,28 @@
                         })
                         .then(res => res.json())
                         .then(data => {
-                            if(data.error) {
-                                alert("Erreur : " + data.error);
-                            } else {
-                                showForm.value = false; 
-                                newObject.value = { name: "", place: "cuisine", target: "encadrant", category: "confort", status: "eteint" };
-                                loadObjects(); 
+                            if(data.new_points) {
+                                console.log("Bravo ! +10 points. Total : " + data.new_points);
                             }
+                            showForm.value = false; 
+                            newObject.value = { name: "", place: "cuisine", status: "eteint", target: "encadrant", category: "confort" };
+                            loadObjects(); 
                         });
                     };
 
                     const deleteObject = (id) => {
-                        if(confirm("Supprimer définitivement cet objet ?")) {
+                        if(confirm("Supprimer cet objet définitivement ?")) {
                             fetch(`/api/objets/delete/${id}/`, {
                                 method: "DELETE",
                                 headers: { "X-CSRFToken": getCSRFToken() }
-                            }).then(() => loadObjects());
+                            })
+                            .then(res => res.json())
+                            .then(data => {
+                                if(data.new_points) {
+                                    console.log("Objet supprimé ! +10 points. Total : " + data.new_points);
+                                }
+                                loadObjects();
+                            });
                         }
                     };
 
@@ -295,11 +314,18 @@
                                 "Content-Type": "application/json",
                                 "X-CSRFToken": getCSRFToken() 
                             },
-                            body: JSON.stringify({ status: item.status })
+                            body: JSON.stringify({ 
+                                status: item.status,
+                                place: item.place,
+                                target: item.target,
+                                category: item.category
+                            })
                         })
-                        .then(res => {
-                            if (!res.ok) alert("Erreur lors de la mise à jour");
-                            else console.log("Statut mis à jour en BDD pour", item.name);
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
+                                console.log("Points mis à jour : " + data.new_points);
+                            }
                         });
                     };
 

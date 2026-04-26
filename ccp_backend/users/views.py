@@ -9,9 +9,8 @@ from .models import Information
 from .models import Profile
 from .models import Objet
 import random
-from django.http import HttpResponse
-from collections import Counter
-import csv
+import json
+
 
 def connexion_view(request):
     if request.user.is_authenticated:       #Si l'utilisateur est connecté, il est renvoyé vers l'accueil
@@ -346,45 +345,59 @@ def consult_object(request):
     return JsonResponse({"success": True, "new_points": profile.points})
 
 
-def statistiques_view(request):
+def api_get_objets(request):
     objets = Objet.objects.all()
-    total = objets.count()
-
-    allumes = objets.filter(status="allume").count()
-    eteints = objets.filter(status="eteint").count()
-    veille = objets.filter(status="veille").count()
-
-    par_lieu = dict(Counter(o.get_place_display() for o in objets))
-    par_cat = dict(Counter(o.get_category_display() for o in objets))
-
-    surveillance = objets.filter(status="allume", target="enfant")
-    maintenance = objets.filter(status="veille")
-
-    conso = allumes * 100 + veille * 10
-
-    contexte = {
-        "total": total,
-        "allumes": allumes,
-        "eteints": eteints,
-        "veille": veille,
-        "par_lieu": par_lieu,
-        "par_cat": par_cat,
-        "surveillance": surveillance,
-        "maintenance": maintenance,
-        "conso": conso,
-    }
-    return render(request, "statistiques.html", contexte)
+    data = [
+        {
+            "id": obj.id,
+            "name": obj.name,
+            "place": obj.place,
+            "status": obj.status,
+            "category": obj.category,
+            "target": obj.target,
+            "url": obj.url
+        } for obj in objets
+    ]
+    return JsonResponse(data, safe=False)
 
 
-def export_csv_view(request):
-    response = HttpResponse(content_type="text/csv; charset=utf-8-sig")
-    response["Content-Disposition"] = 'attachment; filename="rapport.csv"'
-    response.write('\ufeff')
 
-    writer = csv.writer(response)
-    writer.writerow(["Nom", "Lieu", "Cible", "Categorie", "Statut"])
+def api_update_status(request, object_id):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            objet = Objet.objects.get(id=object_id)
+            objet.status = data.get('status')
+            objet.save()
+            return JsonResponse({"message": "Statut mis à jour avec succès"})
+        except Objet.DoesNotExist:
+            return JsonResponse({"error": "Objet non trouvé"}, status=404)
+        
 
-    for o in Objet.objects.all():
-        writer.writerow([o.name, o.get_place_display(), o.get_target_display(), o.get_category_display(), o.get_status_display()])
-
-    return response
+def api_add_objet(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            
+            nouvel_objet = Objet.objects.create(
+                name=data.get('name'),
+                place=data.get('place'),
+                target=data.get('target'),
+                category=data.get('category'),
+                status=data.get('status', 'eteint')
+            )
+            return JsonResponse({"message": "Objet ajouté avec succès", "id": nouvel_objet.id})
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=400)
+        
+def api_delete_objet(request, object_id):
+    
+    if request.method == "DELETE":
+        try:
+            objet = Objet.objects.get(id=object_id)
+            objet.delete()
+            return JsonResponse({"message": "Objet supprimé avec succès"})
+        except Objet.DoesNotExist:
+            return JsonResponse({"error": "Objet non trouvé"}, status=404)
+    
+    return JsonResponse({"error": "Méthode non autorisée"}, status=405)
